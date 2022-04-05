@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <intrin.h>
+#include "time.h"
 
 void SI(int split, char *cardDeck);
 
 void SD(char filename[], char *cardDeck);
 
 void SR(char *cardDeck);
+
+void QQ();
 
 int main() {
     FILE *inStream;
@@ -23,14 +26,16 @@ int main() {
         counter = counter + 2;
 
     }
-    // calls on the different methods available;
+    // Different methods available.
     SR(cards);
     printf("\n");
+
     SD("cards.txt", cards);
-    /*
-    SI(100, cards);
-    printf("\n");
-*/
+
+    /* SI(5, cards);
+      printf("\n");
+    */
+
     int cardPrintedNUm = 0;
     int rowsPrinted = 0;
     // prints out the first line containing the different
@@ -52,8 +57,12 @@ int main() {
     }
 
     fclose(inStream);
+    // Calls exit method.
+    QQ();
 
     return 0;
+
+
 }
 
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
@@ -88,9 +97,11 @@ void SI(int split, char *cardDeck) {
 }
 
 void SR(char *cardDeck) {
+    srand(time(NULL));
     for (int i = 0; i < 52; i++) {
         char cardToShuffle = cardDeck[i * 2];
         char cardToShuffle2 = cardDeck[i * 2 + 1];
+
         int randomCardLocation = (rand() % (i + 1)) * 2;
         char currentVal = cardDeck[randomCardLocation];
         char currentFaction = cardDeck[randomCardLocation + 1];
@@ -109,6 +120,7 @@ void SR(char *cardDeck) {
 
     }
 }
+
 // makes file named cards and prints the current deck.
 void SD(char filename[], char *cardDeck) {
     FILE *f;
@@ -119,9 +131,20 @@ void SD(char filename[], char *cardDeck) {
     }
     fputs("Current card deck\n", f);
     for (int i = 0; i < 104; i += 2) {
-        fprintf(f,"%c",cardDeck[i]);
-        fprintf(f, "%c\n", cardDeck[i+1]);
+        fprintf(f, "%c", cardDeck[i]);
+        fprintf(f, "%c\n", cardDeck[i + 1]);
 
     }
     fclose(f);
+}
+
+// Command to quit program
+void QQ() {
+    printf("\nWrite 'QQ' to exit the program \n");
+    char q;
+    char Q;
+    scanf("%c%c", &q, &Q);
+    if (q == Q && Q == Q) {
+        exit(0);
+    }
 }
