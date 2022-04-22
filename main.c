@@ -24,7 +24,7 @@ void QQ();
 
 int main() {
     FILE *inStream;
-    inStream = fopen("C:\\Users\\siggo\\CLionProjects\\yukonCProjectvugui\\KortTilSolitare.txt", "r");
+    inStream = fopen("/Users/christianhyltoft/CLionProjects/yukonCProject/KortTilSolitare.txt", "r");
     if (inStream == NULL)
         printf("Nullpointer");
     char read[104];
