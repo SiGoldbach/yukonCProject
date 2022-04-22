@@ -26,7 +26,7 @@ void QQ();
 
 int main() {
     FILE *inStream;
-    inStream = fopen("C:\\Users\\vniel\\CLionProjects\\yukonCProject\\KortTilSolitare.txt", "r");
+    inStream = fopen("KortTilSolitare.txt", "r");
     if (inStream == NULL)
         printf("Nullpointer");
     char read[104];
@@ -164,7 +164,7 @@ void QQ() {
     char a;
     char b;
     scanf("%c%c", &a, &b);
-    if (a == 'Q' || b == 'Q') {
+    if (a == 'Q' && b == 'Q') {
         exit(0);
     }
 }
