@@ -3,7 +3,12 @@
 #include "time.h"
 #include <string.h>
 
+struct card{
+    char type[2];
+    int visible;
+    struct card *next;
 
+};
 
 void SI(int split, char *cardDeck);
 
