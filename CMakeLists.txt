@@ -3,4 +3,4 @@ project(yukon C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(yukon main.c)
+add_executable(yukon main.c GameLogic.h GamrLogic2.h)

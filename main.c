@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <intrin.h>
 #include "time.h"
+#include "GameLogic.h"
+#include "GamrLogic2.h"
 
 struct card{
     char type[2];
