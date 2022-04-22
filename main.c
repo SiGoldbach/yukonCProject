@@ -3,17 +3,21 @@
 #include <intrin.h>
 #include "time.h"
 
+
+
 void SI(int split, char *cardDeck);
 
 void SD(char filename[], char *cardDeck);
 
 void SR(char *cardDeck);
 
+void printArrArray(char cards[]);
+
 void QQ();
 
 int main() {
     FILE *inStream;
-    inStream = fopen("C:\\Users\\vniel\\CLionProjects\\yukonCProject\\KortTilSolitare.txt", "r");
+    inStream = fopen("C:\\Users\\siggo\\CLionProjects\\yukonCProjectvugui\\KortTilSolitare.txt", "r");
     if (inStream == NULL)
         printf("Nullpointer");
     char read[104];
@@ -31,11 +35,24 @@ int main() {
     printf("\n");
 
     SD("cards.txt", cards);
+    printArrArray(cards);
 
     /* SI(5, cards);
       printf("\n");
     */
 
+
+
+    fclose(inStream);
+
+    // Calls exit-method.
+    //
+    QQ();
+    //
+    return 0;
+
+}
+void printArrArray(char cards[]){
     int cardPrintedNUm = 0;
     int rowsPrinted = 0;
     // prints out the first line containing the different
@@ -54,14 +71,6 @@ int main() {
             }
         }
     }
-
-    fclose(inStream);
-
-    // Calls exit-method.
-    //
-    QQ();
-    //
-    return 0;
 
 }
 
