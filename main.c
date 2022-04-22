@@ -53,15 +53,15 @@ int main() {
                 printf("\n");
             }
         }
-
     }
 
     fclose(inStream);
-    // Calls exit method.
+
+    // Calls exit-method.
+    //
     QQ();
-
+    //
     return 0;
-
 
 }
 
@@ -147,4 +147,14 @@ void QQ() {
     if (q == Q && Q == Q) {
         exit(0);
     }
+}
+// Command to play the game
+void P () {
+    printf("\n Write 'P' to play the game\n");
+    char p;
+    scanf("%c",&P);
+    if (p == P) {
+
+    }
+
 }
