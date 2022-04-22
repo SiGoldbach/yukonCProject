@@ -7,6 +7,8 @@ void SI(int split, char *cardDeck);
 
 void SD(char filename[], char *cardDeck);
 
+void P(char filename[], char *cardDeck);
+
 void SR(char *cardDeck);
 
 void QQ();
@@ -141,20 +143,30 @@ void SD(char filename[], char *cardDeck) {
 // Command to quit program
 void QQ() {
     printf("\nWrite 'QQ' to exit the program \n");
-    char q;
-    char Q;
-    scanf("%c%c", &q, &Q);
-    if (q == Q && Q == Q) {
+    char a;
+    char b;
+    scanf("%c%c", &a, &b);
+    if (a == 'Q' && b == 'Q') {
         exit(0);
     }
 }
+/*
 // Command to play the game
-void P () {
-    printf("\n Write 'P' to play the game\n");
-    char p;
-    scanf("%c",&P);
-    if (p == P) {
-
+void P(char filename[], char *cardDeck) {
+    FILE *f;
+    if (strlen(filename) == 0) {
+        f = fopen("cards.txt", "r");
+    } else {
+        f = fopen(filename, "r");
     }
-
-}
+    printf("\n Write 'P' to play the game\n");
+    char c;
+    scanf("%c", &P);
+    if (c == P) {
+        for (int i = 0; i < 104; i += 2) {
+            fprintf(f, "%c", cardDeck[i]);
+            fprintf(f, "%c\n", cardDeck[i + 1]);
+        }
+        fclose(f);
+    }
+} */
