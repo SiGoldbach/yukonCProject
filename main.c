@@ -55,13 +55,12 @@ int main() {
     fclose(inStream);
 
     // Calls exit-method.
-    //
     QQ();
 
-    //
     return 0;
 
 }
+
 
 void printArrArray(char cards[]) {
     int cardPrintedNUm = 0;
