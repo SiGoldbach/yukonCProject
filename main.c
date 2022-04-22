@@ -11,6 +11,9 @@ struct card {
     struct card *next;
 
 };
+struct head {
+    struct card *next;
+};
 
 void SI(int split, char *cardDeck);
 
@@ -23,6 +26,9 @@ void SR(char *cardDeck);
 void printArrArray(char cards[]);
 
 void QQ();
+
+void headFiller(struct head board[]);
+
 
 int main() {
     FILE *inStream;
@@ -49,18 +55,30 @@ int main() {
     /* SI(5, cards);
       printf("\n");
     */
-
+    struct head board[7];
+    struct head *boardPoints = board;
+    struct head aceField[4];
+    struct head *aceFieldPointer = aceField;
+    headFiller(aceFieldPointer);
+    headFiller(boardPoints);
+    struct card c1;
+    c1.type[0] = 'A';
+    c1.type[1] = 'C';
+    board[0].next = &c1;
+    //struct card *c1pointer;
+    //c1pointer=&c1;
+    printf("\n");
+    printf("%c%c", board[0].next->type[0], board[0].next->type[1]);
 
 
     fclose(inStream);
 
     // Calls exit-method.
+    //
     QQ();
-
+    //
     return 0;
-
 }
-
 
 void printArrArray(char cards[]) {
     int cardPrintedNUm = 0;
@@ -185,5 +203,13 @@ void P(char filename[], char *cardDeck) {
             fprintf(f, "%c\n", cardDeck[i + 1]);
         }
         fclose(f);
+    }
+}
+
+void headFiller(struct head board[]) {
+
+    for (int i = 0; i < 7; ++i) {
+        struct head h1;
+        board[i] = h1;
     }
 }
