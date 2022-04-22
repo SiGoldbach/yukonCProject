@@ -23,6 +23,8 @@ void P(char filename[], char *cardDeck);
 
 void SR(char *cardDeck);
 
+void LD (char cards[]);
+
 void printArrArray(char cards[]);
 
 void QQ();
@@ -31,26 +33,18 @@ void headFiller(struct head board[]);
 
 
 int main() {
-    FILE *inStream;
-    inStream = fopen("KortTilSolitare.txt", "r");
-    if (inStream == NULL)
-        printf("Nullpointer");
-    char read[104];
-    char cards[104];
-    int counter = 0;
-    while (!feof(inStream)) {
-        fgets(read, 100, inStream);
-        cards[counter] = read[0];
-        cards[counter + 1] = read[1];
-        counter = counter + 2;
 
-    }
+    char cards[105];
+    char *cardsPointer = cards;
+
+    LD(cardsPointer);
+
     // Different methods available.
     SR(cards);
     printf("\n");
 
-    SD("cards.txt", cards);
-    printArrArray(cards);
+    SD("cards.txt", cardsPointer);
+    printArrArray(cardsPointer);
 
     /* SI(5, cards);
       printf("\n");
@@ -70,16 +64,33 @@ int main() {
     printf("\n");
     printf("%c%c", board[0].next->type[0], board[0].next->type[1]);
 
-
-    fclose(inStream);
-
     // Calls exit-method.
     //
     QQ();
     //
     return 0;
 }
-
+// vigtigt
+// Hvis der bliver indlæst tekst fra andet end kortTilSolitare så skal vi skippe første linje i indlæsningen. !! VIGTIGT
+// vigtigt
+void LD (char cards[]) {
+    FILE *inStream;
+    if (inStream == NULL) {
+        printf("Nullpointer");
+        inStream = fopen("KortTilSolitare.txt", "r");
+  } else {
+       inStream = fopen("cards.txt", "r");
+   }
+    char read[105];
+    int counter = 0;
+    while (!feof(inStream)) {
+        fgets(read, 100, inStream);
+        cards[counter] = read[0];
+        cards[counter + 1] = read[1];
+        counter = counter + 2;
+    }
+    fclose(inStream);
+}
 void printArrArray(char cards[]) {
     int cardPrintedNUm = 0;
     int rowsPrinted = 0;
