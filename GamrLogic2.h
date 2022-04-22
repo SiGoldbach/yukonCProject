@@ -14,7 +14,6 @@
  */
 void quitGame();
 
-
 void quitGame() {
     printf("\nWrite 'Q' to enter main menu \n");
     char q;

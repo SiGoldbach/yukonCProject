@@ -5,7 +5,7 @@
 #include "GameLogic.h"
 #include "GamrLogic2.h"
 
-struct card{
+struct card {
     char type[2];
     int visible;
     struct card *next;
@@ -26,7 +26,7 @@ void QQ();
 
 int main() {
     FILE *inStream;
-    inStream = fopen("/Users/christianhyltoft/CLionProjects/yukonCProject/KortTilSolitare.txt", "r");
+    inStream = fopen("C:\\Users\\vniel\\CLionProjects\\yukonCProject\\KortTilSolitare.txt", "r");
     if (inStream == NULL)
         printf("Nullpointer");
     char read[104];
@@ -57,11 +57,13 @@ int main() {
     // Calls exit-method.
     //
     QQ();
+
     //
     return 0;
 
 }
-void printArrArray(char cards[]){
+
+void printArrArray(char cards[]) {
     int cardPrintedNUm = 0;
     int rowsPrinted = 0;
     // prints out the first line containing the different
@@ -162,11 +164,11 @@ void QQ() {
     char a;
     char b;
     scanf("%c%c", &a, &b);
-    if (a == 'Q' && b == 'Q') {
+    if (a == 'Q' || b == 'Q') {
         exit(0);
     }
 }
-/*
+
 // Command to play the game
 void P(char filename[], char *cardDeck) {
     FILE *f;
@@ -178,11 +180,11 @@ void P(char filename[], char *cardDeck) {
     printf("\n Write 'P' to play the game\n");
     char c;
     scanf("%c", &P);
-    if (c == P) {
+    if (c == 'P') {
         for (int i = 0; i < 104; i += 2) {
             fprintf(f, "%c", cardDeck[i]);
             fprintf(f, "%c\n", cardDeck[i + 1]);
         }
         fclose(f);
     }
-} */
+}
