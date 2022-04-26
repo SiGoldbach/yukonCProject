@@ -19,13 +19,15 @@ void SI(int split, char *cardDeck);
 
 void SD(char filename[], char *cardDeck);
 
-void P(char filename[], char *cardDeck);
+void P(char *cardDeck, struct head *board);
 
 void SR(char *cardDeck);
 
-void LD (char cards[]);
+void LD(char cards[]);
 
 void printArrArray(char cards[]);
+
+void printBoard(struct head *board);
 
 void QQ();
 
@@ -34,7 +36,7 @@ void headFiller(struct head board[]);
 
 int main() {
 
-    char cards[105];
+    char cards[104];
     char *cardsPointer = cards;
 
     LD(cardsPointer);
@@ -44,7 +46,7 @@ int main() {
     printf("\n");
 
     SD("cards.txt", cardsPointer);
-    printArrArray(cardsPointer);
+    // printArrArray(cardsPointer);
 
     /* SI(5, cards);
       printf("\n");
@@ -55,33 +57,26 @@ int main() {
     struct head *aceFieldPointer = aceField;
     headFiller(aceFieldPointer);
     headFiller(boardPoints);
-    struct card c1;
-    c1.type[0] = 'A';
-    c1.type[1] = 'C';
-    board[0].next = &c1;
-    //struct card *c1pointer;
-    //c1pointer=&c1;
-    printf("\n");
-    printf("%c%c", board[0].next->type[0], board[0].next->type[1]);
 
-    // Calls exit-method.
-    //
+
+    P(cardsPointer, board);
+    // prints board-method.
+    printBoard(board);
+    // Calls QQ (exit-method).
     QQ();
-    //
     return 0;
 }
-// vigtigt
-// Hvis der bliver indlæst tekst fra andet end kortTilSolitare så skal vi skippe første linje i indlæsningen. !! VIGTIGT
-// vigtigt
-void LD (char cards[]) {
+
+// loader vores kort fra filen.
+void LD(char cards[]) {
     FILE *inStream;
     if (inStream == NULL) {
         printf("Nullpointer");
         inStream = fopen("KortTilSolitare.txt", "r");
-  } else {
-       inStream = fopen("cards.txt", "r");
-   }
-    char read[105];
+    } else {
+        inStream = fopen("cards.txt", "r");
+    }
+    char read[104];
     int counter = 0;
     while (!feof(inStream)) {
         fgets(read, 100, inStream);
@@ -91,12 +86,13 @@ void LD (char cards[]) {
     }
     fclose(inStream);
 }
+
 void printArrArray(char cards[]) {
     int cardPrintedNUm = 0;
     int rowsPrinted = 0;
     // prints out the first line containing the different
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
-    for (int j = 0; j <= 104; ++j) {
+    for (int j = 0; j < 104; ++j) {
         printf("%c", cards[j]);
         if (j % 2 != 0) {
             printf("\t");
@@ -110,7 +106,27 @@ void printArrArray(char cards[]) {
             }
         }
     }
+}
 
+void printBoard(struct head *board) {
+    // prints out the first line containing the different
+    printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
+    struct card *cards[7];
+    for (int i = 0; i < 7; ++i) {
+        cards[i] = board[i].next;
+    }
+    for (int j = 0; j <11; ++j) {
+
+        for (int i = 0; i < 7; ++i) {
+            if (cards[i]->visible == 0) {
+                printf("[]\t");
+            } else {
+                printf("%c%c\t", cards[i]->type[0], cards[i]->type[1]);
+            }
+            cards[i] = cards[i]->next;
+        }
+        printf("\n");
+    }
 }
 
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
@@ -177,7 +193,6 @@ void SD(char filename[], char *cardDeck) {
     } else {
         f = fopen(filename, "wb");
     }
-    fputs("Current card deck\n", f);
     for (int i = 0; i < 104; i += 2) {
         fprintf(f, "%c", cardDeck[i]);
         fprintf(f, "%c\n", cardDeck[i + 1]);
@@ -198,22 +213,31 @@ void QQ() {
 }
 
 // Command to play the game
-void P(char filename[], char *cardDeck) {
-    FILE *f;
-    if (strlen(filename) == 0) {
-        f = fopen("cards.txt", "r");
-    } else {
-        f = fopen(filename, "r");
-    }
-    printf("\n Write 'P' to play the game\n");
-    char c;
-    scanf("%c", &P);
-    if (c == 'P') {
-        for (int i = 0; i < 104; i += 2) {
-            fprintf(f, "%c", cardDeck[i]);
-            fprintf(f, "%c\n", cardDeck[i + 1]);
+void P(char *cardDeck, struct head *board) {
+    struct card *c1 = malloc(sizeof(struct card));
+    int cardCounter = 0;
+    LD(cardDeck);
+    headFiller(board);
+    c1->type[0] = cardDeck[0];
+    c1->type[1] = cardDeck[1];
+    c1->visible = 1;
+    board[0].next = c1;
+    cardCounter = 1;
+    for (int i = 1; i < 7; ++i) {
+        struct card **nextCard = &board[i].next;
+        for (int j = 1; j < i + 6; ++j) {
+            struct card *c2 = malloc(sizeof(struct card));
+            c2->type[0] = cardDeck[cardCounter * 2];
+            c2->type[1] = cardDeck[cardCounter * 2 + 1];
+            if (j < i) {
+                c2->visible = 0;
+            } else {
+                c2->visible = 1;
+            }
+            *nextCard = c2;
+            nextCard = &c2->next;
+            cardCounter++;
         }
-        fclose(f);
     }
 }
 
