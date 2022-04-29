@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <String.h>
+#include <string.h>
 #include <time.h>
 #include "GameLogic.h"
 #include "GamrLogic2.h"
@@ -254,6 +254,7 @@ void P(char *cardDeck, struct head *board) {
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
     c1->visible = 1;
+    c1->next = NULL;
 
     board[0].next = c1;
     cardCounter = 1;
@@ -263,6 +264,7 @@ void P(char *cardDeck, struct head *board) {
             struct card *c2 = malloc(sizeof(struct card));
             c2->type[0] = cardDeck[cardCounter * 2];
             c2->type[1] = cardDeck[cardCounter * 2 + 1];
+            c2->next = NULL;
             if (j < i + 1) {
                 c2->visible = 0;
             } else {
