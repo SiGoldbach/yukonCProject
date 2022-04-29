@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <String.h>
-#include "time.h"
+#include <time.h>
 #include "GameLogic.h"
 #include "GamrLogic2.h"
 
@@ -123,15 +123,18 @@ void printBoard(struct head *board) {
     for (int j = 0; j < 11; ++j) {
 
         for (int i = 0; i < 7; ++i) {
+            if(cards[i] == NULL){
+                printf("  \t");
+            }else {
 
-            if (cards[i]->visible == 0) {
-                printf("[]\t");
-            } else {
-                printf("%c%c\t", cards[i]->type[0], cards[i]->type[1]);
+                if (cards[i]->visible == 0) {
+                    printf("[]\t");
+                } else {
+                    printf("%c%c\t", cards[i]->type[0], cards[i]->type[1]);
+                }
+
+                cards[i] = cards[i]->next;
             }
-
-            cards[i] = cards[i]->next;
-
         }
         printf("\n");
     }
