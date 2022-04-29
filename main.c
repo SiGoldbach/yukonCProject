@@ -33,6 +33,8 @@ void QQ();
 
 void headFiller(struct head board[]);
 
+void boardFiller(struct head Board[], char cards[]);
+
 
 int main() {
 
@@ -248,4 +250,27 @@ void headFiller(struct head board[]) {
         struct head h1;
         board[i] = h1;
     }
+}
+
+void boardFiller(struct head Board[], char cards[]) {
+    int numberPnt=0;
+    int typePnt=1;
+    struct card c1;
+    c1.type[0] = cards[numberPnt];
+    c1.type[1] = cards[typePnt];
+    c1.visible=1;
+    Board[0].next=&c1;
+    for (int i = 0; i < 6; ++i) {
+        numberPnt=numberPnt+2;
+        typePnt=typePnt+2;
+        struct card c2;
+        c2.type[0]=cards[numberPnt];
+        c2.type[1]=cards[typePnt];
+        c2.visible=0;
+        Board[i+1].next=&c2;
+
+
+    }
+
+
 }
