@@ -135,7 +135,20 @@ void printBoard(struct head *board) {
                 cards[i] = cards[i]->next;
             }
         }
+        if ( j == 0){
+            printf("\t[]\tF1");
+        }
+        if ( j == 2) {
+            printf("\t[]\tF2");
+        }
+        if ( j == 4) {
+            printf("\t[]\tF3");
+        }
+        if (j == 6) {
+            printf("\t[]\tF4");
+        }
         printf("\n");
+
     }
 }
 /*
