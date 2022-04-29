@@ -214,6 +214,7 @@ void QQ() {
 
 // Command to play the game
 void P(char *cardDeck, struct head *board) {
+    // måske skal det ikke være "struct card"
     struct card *c1 = malloc(sizeof(struct card));
     int cardCounter = 0;
     LD(cardDeck);
