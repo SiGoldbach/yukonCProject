@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <intrin.h>
 #include "time.h"
 #include "GameLogic.h"
 #include "GamrLogic2.h"
+#include <String.h>
 
 struct card {
     char type[2];
@@ -63,7 +63,7 @@ int main() {
     struct head *aceFieldPointer = aceField;
     headFiller(aceFieldPointer);
     headFiller(boardPoints);
-    boardFiller(boardPoints,cards);
+    boardFiller(boardPoints, cards);
     //struct card *c1pointer;
     //c1pointer=&c1;
     printf("\n");
@@ -96,9 +96,15 @@ void printArrArray(char cards[]) {
                     printf("\t[]\tF%d", rowsPrinted / 2 + 1);
                 }
                 printf("\n");
+
             }
+
         }
+
     }
+    printf("\n" "LAST COMMAND: ");
+    printf("\n" "Message: ");
+    printf("\n""INPUT > ");
 
 }
 
@@ -215,21 +221,21 @@ void headFiller(struct head board[]) {
 }
 
 void boardFiller(struct head Board[], char cards[]) {
-    int numberPnt=0;
-    int typePnt=1;
+    int numberPnt = 0;
+    int typePnt = 1;
     struct card c1;
     c1.type[0] = cards[numberPnt];
     c1.type[1] = cards[typePnt];
-    c1.visible=1;
-    Board[0].next=&c1;
+    c1.visible = 1;
+    Board[0].next = &c1;
     for (int i = 0; i < 6; ++i) {
-        numberPnt=numberPnt+2;
-        typePnt=typePnt+2;
+        numberPnt = numberPnt + 2;
+        typePnt = typePnt + 2;
         struct card c2;
-        c2.type[0]=cards[numberPnt];
-        c2.type[1]=cards[typePnt];
-        c2.visible=0;
-        Board[i+1].next=&c2;
+        c2.type[0] = cards[numberPnt];
+        c2.type[1] = cards[typePnt];
+        c2.visible = 0;
+        Board[i + 1].next = &c2;
 
 
     }
