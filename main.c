@@ -37,6 +37,8 @@ void headFiller(struct head board[]);
 
 void boardFiller(struct head Board[], char cards[]);
 
+void lastCommand();
+
 
 int main() {
 
@@ -150,6 +152,7 @@ void printBoard(struct head *board) {
         printf("\n");
 
     }
+    lastCommand();
 }
 /*
 void printBoard2(struct head *board){
@@ -318,5 +321,21 @@ void boardFiller(struct head Board[], char cards[]) {
 
     }
 
+
+}
+
+void lastCommand(){
+    char a;
+    char b;
+    scanf("%c%c", &a, &b);
+  printf("\n" "LAST COMMAND: %c%c\n", a, b);
+
+}
+
+void message(){
+
+}
+
+void input(){
 
 }
