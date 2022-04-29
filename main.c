@@ -152,6 +152,13 @@ void printBoard(struct head *board) {
         printf("\n");
 
     }
+    char b;
+    printf("write Q to return to STARTUP phase\n");
+    scanf("%c", &b);
+    if (b != 'Q') {
+        printf("That command is not available\n");
+        printf("To return to STARTUP phase write Q");
+    }
     lastCommand();
 }
 /*
