@@ -16,10 +16,9 @@ void quitGame();
 
 void quitGame() {
     printf("\nWrite 'Q' to enter main menu \n");
-    char q;
-    char Q;
-    scanf("%c", &q);
-    if (q == Q) {
+    char a;
+    scanf("%c", &a);
+    if (a == 'Q') {
         exit(0);
     }
 }
