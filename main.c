@@ -130,6 +130,27 @@ void printBoard(struct head *board) {
         printf("\n");
     }
 }
+void printBoard2(struct head *board){
+    printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
+    int length[7];
+    for (int i = 0; i < 7; ++i) {
+        int count=0;
+        if (board->next!=NULL){
+            struct card c1=*board->next;
+            while (c1.next!=NULL){
+                count++;
+                c1=*c1.next;
+            }
+        }
+    }
+    for (int i = 0; i < 7; ++i) {
+        printf("%d",)
+
+
+    }
+
+
+}
 
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
 void SI(int split, char *cardDeck) {
@@ -224,6 +245,7 @@ void P(char *cardDeck, struct head *board) {
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
     c1->visible = 1;
+    c1->next=NULL;
     board[0].next = c1;
     cardCounter = 1;
     for (int i = 1; i < 7; ++i) {
