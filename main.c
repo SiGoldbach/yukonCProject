@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <intrin.h>
+#include <String.h>
 #include "time.h"
 #include "GameLogic.h"
 #include "GamrLogic2.h"
@@ -16,6 +16,8 @@ struct head {
 };
 
 void SI(int split, char *cardDeck);
+
+void printBoard2(struct head *board);
 
 void SD(char filename[], char *cardDeck);
 
@@ -117,19 +119,24 @@ void printBoard(struct head *board) {
     for (int i = 0; i < 7; ++i) {
         cards[i] = board[i].next;
     }
-    for (int j = 0; j <11; ++j) {
+
+    for (int j = 0; j < 11; ++j) {
 
         for (int i = 0; i < 7; ++i) {
+
             if (cards[i]->visible == 0) {
                 printf("[]\t");
             } else {
                 printf("%c%c\t", cards[i]->type[0], cards[i]->type[1]);
             }
+
             cards[i] = cards[i]->next;
+
         }
         printf("\n");
     }
 }
+/*
 void printBoard2(struct head *board){
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
     int length[7];
@@ -144,14 +151,14 @@ void printBoard2(struct head *board){
         }
     }
     for (int i = 0; i < 7; ++i) {
-        printf("%d",)
+        printf("%c%c\t", length[7]);
 
 
     }
 
 
 }
-
+*/
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
 void SI(int split, char *cardDeck) {
     if (split > 52 || split < 0) {
@@ -245,7 +252,7 @@ void P(char *cardDeck, struct head *board) {
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
     c1->visible = 1;
-    c1->next=NULL;
+
     board[0].next = c1;
     cardCounter = 1;
     for (int i = 1; i < 7; ++i) {
@@ -254,7 +261,7 @@ void P(char *cardDeck, struct head *board) {
             struct card *c2 = malloc(sizeof(struct card));
             c2->type[0] = cardDeck[cardCounter * 2];
             c2->type[1] = cardDeck[cardCounter * 2 + 1];
-            if (j < i) {
+            if (j < i + 1) {
                 c2->visible = 0;
             } else {
                 c2->visible = 1;
@@ -275,21 +282,21 @@ void headFiller(struct head board[]) {
 }
 
 void boardFiller(struct head Board[], char cards[]) {
-    int numberPnt=0;
-    int typePnt=1;
+    int numberPnt = 0;
+    int typePnt = 1;
     struct card c1;
     c1.type[0] = cards[numberPnt];
     c1.type[1] = cards[typePnt];
-    c1.visible=1;
-    Board[0].next=&c1;
+    c1.visible = 1;
+    Board[0].next = &c1;
     for (int i = 0; i < 6; ++i) {
-        numberPnt=numberPnt+2;
-        typePnt=typePnt+2;
+        numberPnt = numberPnt + 2;
+        typePnt = typePnt + 2;
         struct card c2;
-        c2.type[0]=cards[numberPnt];
-        c2.type[1]=cards[typePnt];
-        c2.visible=0;
-        Board[i+1].next=&c2;
+        c2.type[0] = cards[numberPnt];
+        c2.type[1] = cards[typePnt];
+        c2.visible = 0;
+        Board[i + 1].next = &c2;
 
 
     }
