@@ -67,7 +67,6 @@ int main() {
     // prints board-method.
     printBoard(board);
     // Calls QQ (exit-method).
-    QQ();
     return 0;
 }
 
