@@ -137,53 +137,23 @@ void printBoard(struct head *board) {
                 cards[i] = cards[i]->next;
             }
         }
-        if ( j == 0){
-            printf("\t[]\tF1");
+        if ( j % 2 == 0 && j <= 6){
+            printf("\t[]\tF%d",j/2+1);
         }
-        if ( j == 2) {
-            printf("\t[]\tF2");
-        }
-        if ( j == 4) {
-            printf("\t[]\tF3");
-        }
-        if (j == 6) {
-            printf("\t[]\tF4");
-        }
+
         printf("\n");
 
     }
     char b;
     printf("write Q to return to STARTUP phase\n");
     scanf("%c", &b);
+
     if (b != 'Q') {
         printf("That command is not available\n");
         printf("To return to STARTUP phase write Q");
     }
-    lastCommand();
 }
-/*
-void printBoard2(struct head *board){
-    printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
-    int length[7];
-    for (int i = 0; i < 7; ++i) {
-        int count=0;
-        if (board->next!=NULL){
-            struct card c1=*board->next;
-            while (c1.next!=NULL){
-                count++;
-                c1=*c1.next;
-            }
-        }
-    }
-    for (int i = 0; i < 7; ++i) {
-        printf("%c%c\t", length[7]);
 
-
-    }
-
-
-}
-*/
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
 void SI(int split, char *cardDeck) {
     if (split > 52 || split < 0) {
@@ -278,7 +248,6 @@ void P(char *cardDeck, struct head *board) {
     c1->type[1] = cardDeck[1];
     c1->visible = 1;
     c1->next = NULL;
-
     board[0].next = c1;
     cardCounter = 1;
     for (int i = 1; i < 7; ++i) {
@@ -330,12 +299,11 @@ void boardFiller(struct head Board[], char cards[]) {
 
 
 }
-
 void lastCommand(){
     char a;
     char b;
     scanf("%c%c", &a, &b);
-  printf("\n" "LAST COMMAND: %c%c\n", a, b);
+  printf("\nLAST COMMAND: %c%c\n", a, b);
 
 }
 
