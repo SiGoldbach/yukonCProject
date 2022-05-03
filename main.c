@@ -48,15 +48,11 @@ int main() {
     LD(cardsPointer);
 
     // Different methods available.
-    SR(cards);
-    printf("\n");
+
 
     SD("cards.txt", cardsPointer);
     // printArrArray(cardsPointer);
 
-    /* SI(5, cards);
-      printf("\n");
-    */
     struct head board[7];
     struct head *boardPoints = board;
     struct head aceField[4];
@@ -64,11 +60,33 @@ int main() {
     headFiller(aceFieldPointer);
     headFiller(boardPoints);
 
-
-    P(cardsPointer, board);
     // prints board-method.
-    printBoard(board);
+    //  printBoard(board);
     // Calls QQ (exit-method).
+    while (1) {
+        char a;
+        char b;
+        printf("Give command\n");
+        scanf("%c", &a);
+
+        if (a == 'P') {
+            P(cardsPointer, board);
+        }
+        scanf("%c", &b);
+        if (a == 'S' && b == 'R') {
+            SR(cards);
+        }
+        if (a == 'S' && b == 'I') {
+            int c;
+            printf("Give split amount\n");
+            scanf("%d", &c);
+            SI(c, cards);
+        }
+        if (a == 'Q' && b == 'Q') {
+            QQ();
+            return 0;
+        }
+    }
     return 0;
 }
 
@@ -76,11 +94,11 @@ int main() {
 void LD(char cards[]) {
     FILE *inStream;
     if (inStream == NULL) {
-        printf("Nullpointer");
         inStream = fopen("KortTilSolitare.txt", "r");
     } else {
         inStream = fopen("cards.txt", "r");
     }
+
     char read[104];
     int counter = 0;
     while (!feof(inStream)) {
@@ -126,9 +144,9 @@ void printBoard(struct head *board) {
     for (int j = 0; j < 11; ++j) {
 
         for (int i = 0; i < 7; ++i) {
-            if(cards[i] == NULL){
+            if (cards[i] == NULL) {
                 printf("  \t");
-            }else {
+            } else {
 
                 if (cards[i]->visible == 0) {
                     printf("[]\t");
@@ -139,8 +157,8 @@ void printBoard(struct head *board) {
                 cards[i] = cards[i]->next;
             }
         }
-        if ( j % 2 == 0 && j <= 6){
-            printf("\t[]\tF%d",j/2+1);
+        if (j % 2 == 0 && j <= 6) {
+            printf("\t[]\tF%d", j / 2 + 1);
         }
 
         printf("\n");
@@ -229,14 +247,9 @@ void SD(char filename[], char *cardDeck) {
 
 // Command to quit program
 void QQ() {
-    printf("\nWrite 'QQ' to exit the program \n");
-    char a;
-    char b;
-    scanf("%c%c", &a, &b);
-    if (a == 'Q' && b == 'Q') {
-        exit(0);
-    }
+    exit(0);
 }
+
 
 // Command to play the game
 void P(char *cardDeck, struct head *board) {
@@ -266,6 +279,21 @@ void P(char *cardDeck, struct head *board) {
             *nextCard = c2;
             nextCard = &c2->next;
             cardCounter++;
+        }
+    }
+    while (1) {
+        char a;
+        char b;
+        scanf("%c%c", &a, &b);
+        if (a != 'Q') {
+            lastCommand(a, b);
+            printf("MESSAGE: Command unavailable\n");
+            printf("INPUT >\t");
+        }
+        if (a == 'Q') {
+            lastCommand(a, b);
+            printf("MESSAGE: OK\n");
+            break;
         }
     }
 }
@@ -301,15 +329,15 @@ void boardFiller(struct head Board[], char cards[]) {
 
 }
 
-void lastCommand(char a, char b){
-    printf("\n LAST COMMAND: %c%c\n", a,b);
+void lastCommand(char a, char b) {
+    printf("\nLAST COMMAND: %c%c\n", a, b);
 
 }
 
-void message(){
+void message() {
 
 }
 
-void input(){
+void input() {
 
 }
