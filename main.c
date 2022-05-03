@@ -37,7 +37,7 @@ void headFiller(struct head board[]);
 
 void boardFiller(struct head Board[], char cards[]);
 
-void lastCommand();
+void lastCommand(char a, char b);
 
 
 int main() {
@@ -114,6 +114,8 @@ void printArrArray(char cards[]) {
 }
 
 void printBoard(struct head *board) {
+    char b;
+    char a;
     // prints out the first line containing the different
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
     struct card *cards[7];
@@ -144,14 +146,13 @@ void printBoard(struct head *board) {
         printf("\n");
 
     }
-    char b;
     printf("write Q to return to STARTUP phase\n");
-    scanf("%c", &b);
-
+    scanf("%c%c", &a, &b);
     if (b != 'Q') {
         printf("That command is not available\n");
         printf("To return to STARTUP phase write Q");
     }
+    lastCommand(a, b);
 }
 
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
@@ -299,11 +300,9 @@ void boardFiller(struct head Board[], char cards[]) {
 
 
 }
-void lastCommand(){
-    char a;
-    char b;
-    scanf("%c%c", &a, &b);
-  printf("\nLAST COMMAND: %c%c\n", a, b);
+
+void lastCommand(char a, char b){
+    printf("\n LAST COMMAND: %c%c\n", a,b);
 
 }
 
