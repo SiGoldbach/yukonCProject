@@ -47,6 +47,12 @@ int moveWholeRow(struct head board[], int startRow, int tooRow);
 
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow);
 
+/**
+ * We are here defining a correct what a deck should hold with to chararray in look only fashion;
+ */
+ char types[4]={'C','D','H','S'};
+ char values[13]={'A','2','3','4','5','6','7','8','9','T','Q','K'};
+
 
 int main() {
 
