@@ -39,6 +39,8 @@ void boardFiller(struct head Board[], char cards[]);
 
 void lastCommand(char a, char b);
 
+int calculateLongestRowOfCards(struct head board[]);
+
 int move(struct head board[], const char card[], int startRow, int toRow);
 
 int moveWholeRow(struct head board[], int startRow, int tooRow);
@@ -80,6 +82,7 @@ int main() {
     printBoard(board);
     moveKingToEmptyRow(board,"KS",6,0);
     printBoard(board);
+    printf("\n");
 
 
 
@@ -141,7 +144,7 @@ void printBoard(struct head *board) {
         cards[i] = board[i].next;
     }
 
-    for (int j = 0; j < 15; ++j) {
+    for (int j = 0; j < calculateLongestRowOfCards(board); ++j) {
 
         for (int i = 0; i < 7; ++i) {
             if (cards[i] == NULL) {
@@ -325,9 +328,26 @@ void input() {
 
 }
 
-int calculateLongestRowOfCards(){
-    return 1;
-};
+int calculateLongestRowOfCards(struct head board[]){
+    int longestRow=0;
+    for (int i = 0; i < 7; ++i) {
+        if(board[i].next==NULL){
+            continue;
+        }
+        struct card *cardForIteratingList=board[i].next;
+        int cur=1;
+        while (cardForIteratingList->next!=NULL){
+            cur++;
+            cardForIteratingList=cardForIteratingList->next;
+        }
+        if(cur>longestRow){
+            longestRow=cur;
+        }
+
+
+    }
+    return longestRow;
+}
 
 
 int move(struct head board[], char const card[], int startRow, int tooRow) {
