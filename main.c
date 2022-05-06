@@ -39,6 +39,8 @@ void boardFiller(struct head Board[], char cards[]);
 
 void lastCommand(char a, char b);
 
+int move(struct head board[], char card[], int startRow, int toRow);
+
 
 int main() {
 
@@ -68,6 +70,10 @@ int main() {
     P(cardsPointer, board);
     // prints board-method.
     printBoard(board);
+    move(board, "KH", 5, 0);
+    printBoard(board);
+
+
     // Calls QQ (exit-method).
     return 0;
 }
@@ -77,9 +83,12 @@ void LD(char cards[]) {
     FILE *inStream;
     if (inStream == NULL) {
         printf("Nullpointer");
-        inStream = fopen("KortTilSolitare.txt", "r");
+        inStream = fopen("cmake-build-debug/KortTilSolitare.txt", "r");
     } else {
-        inStream = fopen("cards.txt", "r");
+        inStream = fopen("KortTilSolitare.txt", "r");
+    }
+    if (inStream == NULL) {
+        printf("Nullpointer");
     }
     char read[104];
     int counter = 0;
@@ -126,9 +135,9 @@ void printBoard(struct head *board) {
     for (int j = 0; j < 11; ++j) {
 
         for (int i = 0; i < 7; ++i) {
-            if(cards[i] == NULL){
+            if (cards[i] == NULL) {
                 printf("  \t");
-            }else {
+            } else {
 
                 if (cards[i]->visible == 0) {
                     printf("[]\t");
@@ -139,8 +148,8 @@ void printBoard(struct head *board) {
                 cards[i] = cards[i]->next;
             }
         }
-        if ( j % 2 == 0 && j <= 6){
-            printf("\t[]\tF%d",j/2+1);
+        if (j % 2 == 0 && j <= 6) {
+            printf("\t[]\tF%d", j / 2 + 1);
         }
 
         printf("\n");
@@ -301,15 +310,52 @@ void boardFiller(struct head Board[], char cards[]) {
 
 }
 
-void lastCommand(char a, char b){
-    printf("\n LAST COMMAND: %c%c\n", a,b);
+void lastCommand(char a, char b) {
+    printf("\n LAST COMMAND: %c%c\n", a, b);
 
 }
 
-void message(){
+void message() {
 
 }
 
-void input(){
+void input() {
 
+}
+
+int move(struct head board[], char card[], int startRow, int tooRow) {
+    if (board[0].next->next == NULL)
+        printf("As expected\n");
+    printf("In move function\n");
+    if (startRow > 6 || tooRow > 6) {
+        return 0;
+    }
+    struct card *current = board[startRow].next;
+    printf("%c%c",current->next->type[0],current->next->type[1]);
+    struct card *result = NULL;
+    while (1) {
+        if (current->next == NULL) {
+            return 0;
+        }
+        printf("%c%c",current->next->type[0],current->next->type[1]);
+        if (current->next->type[0] == card[0] && current->next->type[1] == card[1]) {
+            result = current->next;
+            break;
+        }
+        current = current->next;
+    }
+    printf("\n");
+    printf("Current: %c%c\n",current->type[0],current->type[1]);
+    printf("Result: %c%c",result->type[0],result->type[1]);
+    printf("\n");
+    struct card *to=board[tooRow].next;
+    while (1){
+        if (to->next==NULL){
+            to->next=result;
+            break;
+        }
+        to=to->next;
+    }
+    current->next=NULL;
+    return 1;
 }
