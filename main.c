@@ -39,7 +39,11 @@ void boardFiller(struct head Board[], char cards[]);
 
 void lastCommand(char a, char b);
 
-int move(struct head board[], char card[], int startRow, int toRow);
+int move(struct head board[], const char card[], int startRow, int toRow);
+
+int moveWholeRow(struct head board[], int startRow, int tooRow);
+
+int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow);
 
 
 int main() {
@@ -72,6 +76,11 @@ int main() {
     printBoard(board);
     move(board, "KH", 5, 0);
     printBoard(board);
+    moveWholeRow(board,0,6);
+    printBoard(board);
+    moveKingToEmptyRow(board,"KS",6,0);
+    printBoard(board);
+
 
 
     // Calls QQ (exit-method).
@@ -85,7 +94,7 @@ void LD(char cards[]) {
         printf("Nullpointer");
         inStream = fopen("cmake-build-debug/KortTilSolitare.txt", "r");
     } else {
-        inStream = fopen("KortTilSolitare.txt", "r");
+        inStream = fopen("KortTilSolitare .txt", "r");
     }
     if (inStream == NULL) {
         printf("Nullpointer");
@@ -132,7 +141,7 @@ void printBoard(struct head *board) {
         cards[i] = board[i].next;
     }
 
-    for (int j = 0; j < 11; ++j) {
+    for (int j = 0; j < 15; ++j) {
 
         for (int i = 0; i < 7; ++i) {
             if (cards[i] == NULL) {
@@ -155,13 +164,6 @@ void printBoard(struct head *board) {
         printf("\n");
 
     }
-    printf("write Q to return to STARTUP phase\n");
-    scanf("%c%c", &a, &b);
-    if (b != 'Q') {
-        printf("That command is not available\n");
-        printf("To return to STARTUP phase write Q");
-    }
-    lastCommand(a, b);
 }
 
 // method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
@@ -323,16 +325,19 @@ void input() {
 
 }
 
-int move(struct head board[], char card[], int startRow, int tooRow) {
-    if (board[0].next->next == NULL)
-        printf("As expected\n");
-    printf("In move function\n");
+int calculateLongestRowOfCards(){
+    return 1;
+};
+
+
+int move(struct head board[], char const card[], int startRow, int tooRow) {
+    printf("#move\n");
     if (startRow > 6 || tooRow > 6) {
         return 0;
     }
     struct card *current = board[startRow].next;
-    printf("%c%c",current->next->type[0],current->next->type[1]);
     struct card *result = NULL;
+    printf("%c%c",current->next->type[0],current->next->type[1]);
     while (1) {
         if (current->next == NULL) {
             return 0;
@@ -358,4 +363,44 @@ int move(struct head board[], char card[], int startRow, int tooRow) {
     }
     current->next=NULL;
     return 1;
+}
+
+int moveWholeRow(struct head board[], int startRow, int tooRow){
+    printf("#moveWholeRow\n");
+    struct card *rowStartToBeMoved=board[startRow].next;
+    printf("%C%C\n",rowStartToBeMoved->type[0],rowStartToBeMoved->type[1]);
+    struct card *IteratingCard=board[tooRow].next;
+    while (IteratingCard->next!=NULL){
+        printf("%C%C ",IteratingCard->type[0],IteratingCard->type[1]);
+
+        IteratingCard=IteratingCard->next;
+    }
+    IteratingCard->next=rowStartToBeMoved;
+    board[startRow].next=NULL;
+    printf("\n");
+
+    return 1;
+
+
+}
+
+int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow){
+    printf("#moveKingToEmptyRow");
+    struct card*kingFinder=board[startRow].next;
+    printf("%C%C",kingFinder->type[0],kingFinder->type[1]);
+    if(kingFinder->type[0]==card[0]&&kingFinder->type[1]==card[1]){
+        board[tooRow].next=kingFinder;
+        board[startRow].next=NULL;
+    }
+        while (1){
+            if(kingFinder->next->type[0]==card[0]&&kingFinder->next->type[1]==card[1]){
+                board[tooRow].next=kingFinder->next;
+                kingFinder->next=NULL;
+                break;
+            }
+            kingFinder=kingFinder->next;
+
+            }
+    return 1;
+
 }
