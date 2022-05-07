@@ -76,7 +76,7 @@ int commandBeforeGameHub() {
     struct head *aceFieldPointer = aceField;
     headFiller(aceFieldPointer);
     headFiller(boardPoints);
-    char command[20];
+    char command[50];
     char lastCommand[10];
     int printLast = 0;
     int activeDeckBoolean = 0;
@@ -117,6 +117,13 @@ int commandBeforeGameHub() {
                     printf("No active card deck");
                 }
             }
+            if (command[0]=='S'&&command[1]=='D'){
+                if(activeDeckBoolean){
+                    SD("",cardsPointer);
+                } else{
+                    printf("There is no deck to save.");
+                }
+            }
 
             if (command[0] == '#')
                 break;
@@ -132,14 +139,16 @@ int commandBeforeGameHub() {
                 case 6:
                     printf("");
                     int big = (command[4] - 48) * 10;
-                    int small=command[5]-48;
-                    SI(big+small,cardsPointer);
+                    int small = command[5] - 48;
+                    SI(big + small, cardsPointer);
 
                     break;
                 default:
-                    printf("The number you entered is not between 0 and 51");
+                    printf("You entered a number that is definitely to high or in a weird format");
                     break;
             }
+
+        } else if (command[0]=='S'&&command[1]=='D'){
 
         }
         strcpy(lastCommand, command);
