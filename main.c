@@ -36,10 +36,6 @@ void QQ();
 
 void headFiller(struct head board[]);
 
-void boardFiller(struct head Board[], char cards[]);
-
-void lastCommand(char a, char b);
-
 int calculateLongestRowOfCards(struct head board[]);
 
 int move(struct head board[], const char card[], int startRow, int tooRow);
@@ -80,7 +76,7 @@ int commandBeforeGameHub() {
     headFiller(aceFieldPointer);
     headFiller(boardPoints);
     char command[50];
-    char lastCommand[10];
+    char lastCommand[50];
     int printLast = 0;
     int activeDeckBoolean = 0;
     welcomeText();
@@ -102,29 +98,27 @@ int commandBeforeGameHub() {
                     printf("Cant load deck properly");
                 }
 
-            }
-            if (command[0] == 'S' && command[1] == 'W') {
+            } else if (command[0] == 'S' && command[1] == 'W') {
                 if (activeDeckBoolean)
                     printArrArray(cards);
                 else
                     printf("No active deck ");
-            }
-            if (command[0] == 'Q' && command[1] == 'Q') {
+            } else if (command[0] == 'Q' && command[1] == 'Q') {
                 QQ2();
-            }
-            if (command[0] == 'S' && command[1] == 'R') {
+            } else if (command[0] == 'S' && command[1] == 'R') {
                 if (activeDeckBoolean) {
                     SR(cardsPointer);
                 } else {
                     printf("No active card deck");
                 }
-            }
-            if (command[0] == 'S' && command[1] == 'D') {
+            } else if (command[0] == 'S' && command[1] == 'D') {
                 if (activeDeckBoolean) {
                     SD("", cardsPointer);
                 } else {
                     printf("There is no deck to save.");
                 }
+            } else if ((command[0] == 'S' && command[1] == 'I')) {
+                SIRandom(cardsPointer);
             }
 
             if (command[0] == '#')
@@ -176,14 +170,13 @@ int commandBeforeGameHub() {
 
 
         } else if (command[0] == 'P') {
-            if (activeDeckBoolean){
+            if (activeDeckBoolean) {
                 P(cardsPointer, board);
                 printf("P works");
                 playGameWelcomeText();
-                playGame(board,aceField);
+                playGame(board, aceField);
 
-            }
-            else
+            } else
                 printf("No deck loaded");
         }
         strcpy(lastCommand, command);
@@ -230,14 +223,44 @@ int commandBeforeGameHub() {
 
 }
 
-void playGame(struct head *board, struct head *aceSpace){
+void playGame(struct head *board, struct head *aceSpace) {
     printBoard(board);
+    int printLast = 0;
+    char command[50];
+    char lastCommand[50];
+    welcomeText();
+    while (1) {
+        printf("LAST Command: ");
+        if (printLast) {
+            printf("%s\n", lastCommand);
+        } else {
+            printf("\n");
+        }
+        printf("Message: OK\n");
+        printf("INPUT >");
+        scanf("%s", command);
+        strcpy(lastCommand, command);
+        if (strlen(command) == 1) {
+            if (command[0] == 'Q') {
+
+            } else if (command[0] == '#') {
+                break;
+            }
+        }
+        printLast = 1;
+    }
 
 
 }
 
 
-// loader vores kort fra filen.
+/**
+ * Loading cards from a specified file, if you do not want a specified file,
+ * If you do not want a specified file call with string "";
+ * @param cards
+ * @param name
+ * @return
+ */
 int LD(char cards[], char name[]) {
     FILE *inStream;
     if (strlen(name) != 0) {
@@ -263,6 +286,12 @@ int LD(char cards[], char name[]) {
     return 1;
 }
 
+/**
+ * This is the print method we use while not playing the game. which just takes a char array.
+ * No reason to allocate memory and put into linked lists before the game starts.
+ * The reader is maybe going to disagree with this...
+ * @param cards
+ */
 void printArrArray(char cards[]) {
     int cardPrintedNUm = 0;
     int rowsPrinted = 0;
@@ -284,6 +313,10 @@ void printArrArray(char cards[]) {
     }
 }
 
+/**
+ * This method is used to print the baord after the game has been started.
+ * @param board
+ */
 void printBoard(struct head *board) {
 
     // prints out the first line containing the different
@@ -318,7 +351,9 @@ void printBoard(struct head *board) {
     }
 }
 
-// method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
+/**
+ * method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
+ */
 void SI(int split, char *cardDeck) {
     if (split > 52 || split < 0) {
         printf("you entered invalid card deck split-size\n");
@@ -349,13 +384,18 @@ void SI(int split, char *cardDeck) {
     }
 }
 
+/**
+ * Generates a random number and then calling SI
+ * @param cardDeck
+ */
 void SIRandom(char *cardDeck) {
-    int r = rand() % 51;
-    int pile1 = r * 2;
-    int pile2 = 104 - pile1;
+    SI(rand() % 51, cardDeck);
 }
 
-
+/**
+ * This shuffles the deck in a random order
+ * @param cardDeck
+ */
 void SR(char *cardDeck) {
     srand(time(NULL));
     for (int i = 0; i < 52; i++) {
@@ -381,7 +421,12 @@ void SR(char *cardDeck) {
     }
 }
 
-// makes file named cards and prints the current deck.
+/**
+ * Print the deck to a specified file.
+ * It is possible to write to a default file called cards.txt if you call with an empty string.
+ * @param filename
+ * @param cardDeck
+ */
 void SD(char filename[], char *cardDeck) {
     FILE *f;
     if (strlen(filename) == 0) {
@@ -397,6 +442,9 @@ void SD(char filename[], char *cardDeck) {
     fclose(f);
 }
 
+/**
+ * Exits program
+ */
 void QQ2() {
     exit(0);
 }
@@ -412,17 +460,20 @@ void QQ() {
     }
 }
 
-// Command to play the game
+/**
+ * Command that allocates memory to the 52 cards and puts them into linked lists.
+ * @param cardDeck
+ * @param board
+ */
 void P(char *cardDeck, struct head *board) {
     // måske skal det ikke være "struct card"
     struct card *c1 = malloc(sizeof(struct card));
-    int cardCounter = 0;
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
     c1->visible = 1;
     c1->next = NULL;
     board[0].next = c1;
-    cardCounter = 1;
+    int cardCounter = 1;
     for (int i = 1; i < 7; ++i) {
         struct card **nextCard = &board[i].next;
         for (int j = 1; j < i + 6; ++j) {
@@ -442,42 +493,25 @@ void P(char *cardDeck, struct head *board) {
     }
 }
 
+/**
+ * Filling the start of the array with linked lists.
+ * @param board
+ */
 void headFiller(struct head board[]) {
 
     for (int i = 0; i < 7; ++i) {
         struct head h1;
+        h1.next=NULL;
         board[i] = h1;
     }
 }
 
-void boardFiller(struct head Board[], char cards[]) {
-    int numberPnt = 0;
-    int typePnt = 1;
-    struct card c1;
-    c1.type[0] = cards[numberPnt];
-    c1.type[1] = cards[typePnt];
-    c1.visible = 1;
-    Board[0].next = &c1;
-    for (int i = 0; i < 6; ++i) {
-        numberPnt = numberPnt + 2;
-        typePnt = typePnt + 2;
-        struct card c2;
-        c2.type[0] = cards[numberPnt];
-        c2.type[1] = cards[typePnt];
-        c2.visible = 0;
-        Board[i + 1].next = &c2;
-
-
-    }
-
-
-}
-
-void lastCommand(char a, char b) {
-    printf("\n LAST COMMAND: %c%c\n", a, b);
-
-}
-
+/**
+ * This is a method helping the print method.
+ * The printBoard is made in a way where need the longest row for it to print pretty
+ * @param board
+ * @return
+ */
 int calculateLongestRowOfCards(struct head board[]) {
     int longestRow = 0;
     for (int i = 0; i < 7; ++i) {
@@ -499,6 +533,14 @@ int calculateLongestRowOfCards(struct head board[]) {
     return longestRow;
 }
 
+/**
+ * Standard move, as not moving an entire row or moving a king
+ * @param board
+ * @param card
+ * @param startRow
+ * @param tooRow
+ * @return
+ */
 int move(struct head board[], char const card[], int startRow, int tooRow) {
     printf("#move\n");
     if (startRow > 6 || tooRow > 6) {
@@ -534,6 +576,9 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
     return 1;
 }
 
+/**
+ * For moving whole rows only
+ */
 int moveWholeRow(struct head board[], int startRow, int tooRow) {
     printf("#moveWholeRow\n");
     struct card *rowStartToBeMoved = board[startRow].next;
@@ -553,6 +598,14 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
 
 }
 
+/**
+ * Only for moving kings to an empty row
+ * @param board
+ * @param card
+ * @param startRow
+ * @param tooRow
+ * @return
+ */
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow) {
     printf("#moveKingToEmptyRow");
     struct card *kingFinder = board[startRow].next;
@@ -574,6 +627,9 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 
 }
 
+/**
+ * Welcome text to get an overview of the commands
+ */
 void welcomeText() {
     printf("Welcome to yukon game\n");
     printf("Commands are as follows\n");
@@ -591,7 +647,10 @@ void welcomeText() {
 
 }
 
-void playGameWelcomeText(){
+/**
+ * Welcome command used when starting the game to help the player out.
+ */
+void playGameWelcomeText() {
     printf("\nYou just started a game with a loaded deck\n");
     printf("These are the possible moves\n");
     printf("Cx:nt->Cy\n");
@@ -601,7 +660,6 @@ void playGameWelcomeText(){
     printf("Where C is row number and F is ace column\n");
     printf("n stand for number and t stands for type\n");
     printf("Exiting the game back to startScreen is also possible with command Q\n");
-
 
 
 }
