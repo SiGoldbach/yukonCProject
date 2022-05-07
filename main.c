@@ -29,7 +29,7 @@ void P(char *cardDeck, struct head *board);
 
 void SR(char *cardDeck);
 
-int LD(char cards[]);
+int LD(char cards[], char name[]);
 
 void printArrArray(char cards[]);
 
@@ -45,13 +45,15 @@ void lastCommand(char a, char b);
 
 int calculateLongestRowOfCards(struct head board[]);
 
-int move(struct head board[], const char card[], int startRow, int toRow);
+int move(struct head board[], const char card[], int startRow, int tooRow);
 
 int moveWholeRow(struct head board[], int startRow, int tooRow);
 
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow);
 
 int commandBeforeGameHub();
+
+void welcomeText();
 
 /**
  * We are here defining a correct what a deck should hold with to chararray in look only fashion;
@@ -80,6 +82,7 @@ int commandBeforeGameHub() {
     char lastCommand[10];
     int printLast = 0;
     int activeDeckBoolean = 0;
+    welcomeText();
     while (1) {
         printf("LAST Command: ");
         if (printLast) {
@@ -88,13 +91,11 @@ int commandBeforeGameHub() {
             printf("\n");
         }
         printf("Message: OK\n");
-        printf("INPUT > ");
+        printf("INPUT >");
         scanf("%s", command);
-        printf("You entered: %s\n", command);
-        printf("Length of input: %d ", strlen(command));
         if (strlen(command) == 2) {
             if (command[0] == 'L' && command[1] == 'D') {
-                if (LD(cardsPointer)) {
+                if (LD(cardsPointer, "")) {
                     activeDeckBoolean = 1;
                 } else {
                     printf("Cant load deck properly");
@@ -117,10 +118,10 @@ int commandBeforeGameHub() {
                     printf("No active card deck");
                 }
             }
-            if (command[0]=='S'&&command[1]=='D'){
-                if(activeDeckBoolean){
-                    SD("",cardsPointer);
-                } else{
+            if (command[0] == 'S' && command[1] == 'D') {
+                if (activeDeckBoolean) {
+                    SD("", cardsPointer);
+                } else {
                     printf("There is no deck to save.");
                 }
             }
@@ -148,8 +149,20 @@ int commandBeforeGameHub() {
                     break;
             }
 
-        } else if (command[0]=='S'&&command[1]=='D'){
+        } else if (command[0] == 'S' && command[1] == 'D') {
+            if (!activeDeckBoolean) {
+                printf("There is no active card deck");
 
+            } else {
+                char fileName[50];
+                int start = 3;
+                for (int i = 0; i < strlen(command) - 4; ++i) {
+                    fileName[i] = command[start];
+                    start++;
+                }
+                printf("%s",fileName);
+                SD(fileName, cardsPointer);
+            }
         }
         strcpy(lastCommand, command);
         printLast = 1;
@@ -160,7 +173,7 @@ int commandBeforeGameHub() {
 
     }
 
-    LD(cardsPointer);
+    LD(cardsPointer, NULL);
 
     // Different methods available.
     SR(cards);
@@ -197,10 +210,9 @@ int commandBeforeGameHub() {
 
 
 // loader vores kort fra filen.
-int LD(char cards[]) {
+int LD(char cards[], char name[]) {
     FILE *inStream;
     if (inStream == NULL) {
-        printf("Nullpointer In instream\n");
         inStream = fopen("cards.txt", "r");
     } else {
         inStream = fopen("KortTilSolitare.txt", "r");
@@ -375,7 +387,7 @@ void P(char *cardDeck, struct head *board) {
     // måske skal det ikke være "struct card"
     struct card *c1 = malloc(sizeof(struct card));
     int cardCounter = 0;
-    LD(cardDeck);
+    LD(cardDeck, NULL);
     headFiller(board);
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
@@ -540,5 +552,23 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 
     }
     return 1;
+
+}
+
+void welcomeText(){
+    printf("Welcome to yukon game\n");
+    printf("Commands are as follows\n");
+    printf("LD: Load a sorted predefined deck\n");
+    printf("SD<UserInput> Load a specific dek of cards\n");
+    printf("SR: Shuffle the cards\n");
+    printf("SD: Load deck into cards.txt\n");
+    printf("SD<UserInput>: Create or overwrite deck into a file\n");
+    printf("SI: Do a random deck split\n");
+    printf("SI<UserInput>: Do a specific deck split\n");
+    printf("SW: Show the cards\n");
+    printf("QQ: Exit the application\n");
+    printf("P: play the game\n");
+
+
 
 }
