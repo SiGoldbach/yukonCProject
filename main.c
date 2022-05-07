@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "GameLogic.h"
 #include "GamrLogic2.h"
 
 struct card {
@@ -20,8 +19,6 @@ void SI(int split, char *cardDeck);
 void SIRandom(char *cardDeck);
 
 void QQ2();
-
-void printBoard2(struct head *board);
 
 void SD(char filename[], char *cardDeck);
 
@@ -54,6 +51,10 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 int commandBeforeGameHub();
 
 void welcomeText();
+
+void playGameWelcomeText();
+
+void playGame(struct head *board, struct head *aceSpace);
 
 /**
  * We are here defining a correct what a deck should hold with to chararray in look only fashion;
@@ -160,9 +161,29 @@ int commandBeforeGameHub() {
                     fileName[i] = command[start];
                     start++;
                 }
-                printf("%s",fileName);
+                printf("%s", fileName);
                 SD(fileName, cardsPointer);
             }
+        } else if (command[0] == 'L' && command[1] == 'D') {
+            char fileName[50];
+            int start = 3;
+            for (int i = 0; i < strlen(command) - 4; ++i) {
+                fileName[i] = command[start];
+                start++;
+            }
+            printf("%s", fileName);
+            LD(fileName, cardsPointer);
+
+
+        } else if (command[0] == 'P') {
+            if (activeDeckBoolean){
+                P(cardsPointer, board);
+                playGameWelcomeText();
+                playGame(board,aceField);
+
+            }
+            else
+                printf("No deck loaded");
         }
         strcpy(lastCommand, command);
         printLast = 1;
@@ -208,13 +229,21 @@ int commandBeforeGameHub() {
 
 }
 
+void playGame(struct head *board, struct head *aceSpace){
+    printBoard(board);
+
+
+}
+
 
 // loader vores kort fra filen.
 int LD(char cards[], char name[]) {
     FILE *inStream;
-    if (inStream == NULL) {
-        inStream = fopen("cards.txt", "r");
+    if (strlen(name) != 0) {
+        printf("Loading custom file\n");
+        inStream = fopen(name, "r");
     } else {
+        printf("Loading standard deck\n");
         inStream = fopen("KortTilSolitare.txt", "r");
     }
     if (inStream == NULL) {
@@ -555,11 +584,11 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 
 }
 
-void welcomeText(){
+void welcomeText() {
     printf("Welcome to yukon game\n");
     printf("Commands are as follows\n");
     printf("LD: Load a sorted predefined deck\n");
-    printf("SD<UserInput> Load a specific dek of cards\n");
+    printf("LD<UserInput> Load a specific dek of cards\n");
     printf("SR: Shuffle the cards\n");
     printf("SD: Load deck into cards.txt\n");
     printf("SD<UserInput>: Create or overwrite deck into a file\n");
@@ -567,7 +596,20 @@ void welcomeText(){
     printf("SI<UserInput>: Do a specific deck split\n");
     printf("SW: Show the cards\n");
     printf("QQ: Exit the application\n");
-    printf("P: play the game\n");
+    printf("P: play the game\n\n");
+
+
+}
+
+void playGameWelcomeText(){
+    printf("You just started a game with a loaded deck\n");
+    printf("These are the possible moves");
+    printf("Cx:nt->Cy");
+    printf("Cx->Cy");
+    printf("Cx->Fy");
+    printf("Fx->Cy");
+    printf("Where C is row number and F is ace column\n");
+    printf("n stand for number and t stands for type");
 
 
 
