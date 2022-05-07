@@ -172,12 +172,13 @@ int commandBeforeGameHub() {
                 start++;
             }
             printf("%s", fileName);
-            LD(fileName, cardsPointer);
+            LD(cardsPointer, fileName);
 
 
         } else if (command[0] == 'P') {
             if (activeDeckBoolean){
                 P(cardsPointer, board);
+                printf("P works");
                 playGameWelcomeText();
                 playGame(board,aceField);
 
@@ -247,7 +248,7 @@ int LD(char cards[], char name[]) {
         inStream = fopen("KortTilSolitare.txt", "r");
     }
     if (inStream == NULL) {
-        printf("Nullpointer Cant find file");
+        printf("cmake-build-debug/KortTilSolitare .txt\n");
         return 0;
     }
     char read[104];
@@ -416,8 +417,6 @@ void P(char *cardDeck, struct head *board) {
     // måske skal det ikke være "struct card"
     struct card *c1 = malloc(sizeof(struct card));
     int cardCounter = 0;
-    LD(cardDeck, NULL);
-    headFiller(board);
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
     c1->visible = 1;
@@ -479,14 +478,6 @@ void lastCommand(char a, char b) {
 
 }
 
-void message() {
-
-}
-
-void input() {
-
-}
-
 int calculateLongestRowOfCards(struct head board[]) {
     int longestRow = 0;
     for (int i = 0; i < 7; ++i) {
@@ -507,7 +498,6 @@ int calculateLongestRowOfCards(struct head board[]) {
     }
     return longestRow;
 }
-
 
 int move(struct head board[], char const card[], int startRow, int tooRow) {
     printf("#move\n");
@@ -602,14 +592,15 @@ void welcomeText() {
 }
 
 void playGameWelcomeText(){
-    printf("You just started a game with a loaded deck\n");
-    printf("These are the possible moves");
-    printf("Cx:nt->Cy");
-    printf("Cx->Cy");
-    printf("Cx->Fy");
-    printf("Fx->Cy");
+    printf("\nYou just started a game with a loaded deck\n");
+    printf("These are the possible moves\n");
+    printf("Cx:nt->Cy\n");
+    printf("Cx->Cy\n");
+    printf("Cx->Fy\n");
+    printf("Fx->Cy\n");
     printf("Where C is row number and F is ace column\n");
-    printf("n stand for number and t stands for type");
+    printf("n stand for number and t stands for type\n");
+    printf("Exiting the game back to startScreen is also possible with command Q\n");
 
 
 
