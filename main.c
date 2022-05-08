@@ -24,7 +24,7 @@ void QQ2();
 
 void SD(char filename[], char *cardDeck);
 
-void P(char *cardDeck, struct head *board);
+void P(const char *cardDeck, struct head *board);
 
 void SR(char *cardDeck);
 
@@ -34,7 +34,6 @@ void printArrArray(char cards[]);
 
 void printBoard(struct head *board);
 
-void QQ();
 
 void Q(struct head *board, struct head *aceFieldTemp);
 
@@ -501,23 +500,12 @@ void QQ2() {
     exit(0);
 }
 
-// Command to quit program
-void QQ() {
-    printf("\nWrite 'QQ' to exit the program \n");
-    char a;
-    char b;
-    scanf("%c%c", &a, &b);
-    if (a == 'Q' && b == 'Q') {
-        exit(0);
-    }
-}
-
 /**
  * Command that allocates memory to the 52 cards and puts them into linked lists.
  * @param cardDeck
  * @param board
  */
-void P(char *cardDeck, struct head *board) {
+void P(const char *cardDeck, struct head *board) {
     struct card *c1 = malloc(sizeof(struct card));
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
@@ -548,7 +536,7 @@ void Q(struct head *board, struct head *aceFieldTemp) {
     struct card *currentCard;
     struct card *prevCard;
     for (int i = 0; i < 7; ++i) {
-        currentCard = &board[i].next;
+        currentCard = board[i].next;
         while (currentCard->next != NULL) {
             prevCard = currentCard;
             currentCard = currentCard->next;
@@ -557,12 +545,15 @@ void Q(struct head *board, struct head *aceFieldTemp) {
         }
         free(currentCard);
     }
-    for (int i = 0; i<4; i++) {
+    for (int i = 0; i < 4; i++) {
+        currentCard = aceFieldTemp[i].next;
         while (aceFieldTemp->next != NULL) {
-            currentCard = &aceFieldTemp->next;
+            prevCard = currentCard;
+            currentCard = aceFieldTemp->next;
             aceFieldTemp->next = currentCard->next;
-            free(currentCard);
+            free(prevCard);
         }
+        free(currentCard);
     }
 }
 
