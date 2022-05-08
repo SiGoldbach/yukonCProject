@@ -34,6 +34,8 @@ void printBoard(struct head *board);
 
 void QQ();
 
+void Q();
+
 void headFiller(struct head board[]);
 
 int calculateLongestRowOfCards(struct head board[]);
@@ -271,7 +273,7 @@ int LD(char cards[], char name[]) {
         inStream = fopen("KortTilSolitare.txt", "r");
     }
     if (inStream == NULL) {
-        printf("cmake-build-debug/KortTilSolitare .txt\n");
+        printf("cmake-build-debug/KortTilSolitare.txt\n");
         return 0;
     }
     char read[104];
@@ -491,6 +493,28 @@ void P(char *cardDeck, struct head *board) {
             cardCounter++;
         }
     }
+}
+
+void Q(char *cardDeck, struct head *board, struct head *aceFieldtemp) {
+    struct card* currentCard;
+    struct card* prevCard;
+    for (int i = 0; i < 7; ++i) {
+        currentCard = &board[i];
+        while (currentCard->next != NULL) {
+            prevCard = currentCard;
+            currentCard= currentCard->next;
+            free(prevCard);
+
+        }
+        free(currentCard);
+    }
+    while (aceFieldtemp->next != NULL) {
+        currentCard = &aceFieldtemp->next;
+        aceFieldtemp->next = currentCard->next;
+        free(currentCard);
+    }
+
+    return;
 }
 
 /**
