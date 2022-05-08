@@ -302,6 +302,7 @@ int LD(char cards[], char name[]) {
     return 1;
 }
 
+//
 int checkIfDeckIsValid(const char cards[]) {
     int typeCounter = 0;
     int valueCounter = 0;
@@ -335,6 +336,33 @@ int checkIfDeckIsValid(const char cards[]) {
     return ret;
 
 
+}
+
+//A method for checking if the carddeck is valid.
+int checkDeckValid(const char cards[]) {
+    int typeCounter = 0;
+    int valueCounter = 0;
+    char type = 'U';
+    char value = 'U';
+    int counter = 0;
+    int ret = 1;
+    for (int i = 0; i < 52; ++i) {
+        if (type == 'U') {
+            type = types[0];
+            value = values[0];
+        } else if (value == 'K') {
+
+        }
+        while (counter <= 103) {
+            if (value == cards[counter] && type == cards[counter + 1])
+                break;
+
+                    counter = counter + 2;
+                    if (counter == 103)
+                        return 0;
+                }
+            }
+                return ret; //returns 1 if the deck is valid.
 }
 
 /**
