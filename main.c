@@ -18,6 +18,8 @@ void SI(int split, char *cardDeck);
 
 void SIRandom(char *cardDeck);
 
+int checkIfDeckIsValid(const char cards[]);
+
 void QQ2();
 
 void SD(char filename[], char *cardDeck);
@@ -34,7 +36,7 @@ void printBoard(struct head *board);
 
 void QQ();
 
-void Q();
+void Q(struct head *board, struct head *aceFieldTemp);
 
 void headFiller(struct head board[]);
 
@@ -95,7 +97,11 @@ int commandBeforeGameHub() {
         if (strlen(command) == 2) {
             if (command[0] == 'L' && command[1] == 'D') {
                 if (LD(cardsPointer, "")) {
-                    activeDeckBoolean = 1;
+                    if (checkIfDeckIsValid(cards)) {
+                        activeDeckBoolean = 1;
+                    } else {
+                        printf("Deck is invalid");
+                    }
                 } else {
                     printf("Cant load deck properly");
                 }
@@ -163,12 +169,20 @@ int commandBeforeGameHub() {
         } else if (command[0] == 'L' && command[1] == 'D') {
             char fileName[50];
             int start = 3;
-            for (int i = 0; i < strlen(command) - 4; ++i) {
+            for (int i = 0; i < strlen(command) - 1; ++i) {
                 fileName[i] = command[start];
                 start++;
             }
-            printf("%s", fileName);
-            LD(cardsPointer, fileName);
+            printf("%d\n", strlen(command));
+            printf("%d\n", strlen(fileName));
+            printf("%s\n", fileName);
+            if (LD(cardsPointer, fileName)) {
+                if (checkIfDeckIsValid(cards)) {
+                    activeDeckBoolean = 1;
+                } else {
+                    printf("Deck is invalid");
+                }
+            }
 
 
         } else if (command[0] == 'P') {
@@ -244,6 +258,7 @@ void playGame(struct head *board, struct head *aceSpace) {
         strcpy(lastCommand, command);
         if (strlen(command) == 1) {
             if (command[0] == 'Q') {
+                Q(board, aceSpace);
 
             } else if (command[0] == '#') {
                 break;
@@ -273,7 +288,7 @@ int LD(char cards[], char name[]) {
         inStream = fopen("KortTilSolitare.txt", "r");
     }
     if (inStream == NULL) {
-        printf("cmake-build-debug/KortTilSolitare.txt\n");
+        printf("cant find deck\n");
         return 0;
     }
     char read[104];
@@ -286,6 +301,41 @@ int LD(char cards[], char name[]) {
     }
     fclose(inStream);
     return 1;
+}
+
+int checkIfDeckIsValid(const char cards[]) {
+    int typeCounter = 0;
+    int valueCounter = 0;
+    char type = 'U';
+    char value = 'U';
+    int counter = 0;
+    int ret = 1;
+    for (int i = 0; i < 52; ++i) {
+        if (type == 'U') {
+            type = types[0];
+            value = values[0];
+        } else if (value == 'K') {
+
+            typeCounter++;
+            valueCounter = 0;
+            type = types[typeCounter];
+            value = values[valueCounter];
+        } else {
+            valueCounter++;
+            value = values[valueCounter];
+        }
+        while (counter <= 103) {
+            if (value == cards[counter] && type == cards[counter + 1])
+                break;
+
+            counter = counter + 2;
+            if (counter == 103)
+                return 0;
+        }
+    }
+    return ret;
+
+
 }
 
 /**
@@ -316,7 +366,7 @@ void printArrArray(char cards[]) {
 }
 
 /**
- * This method is used to print the baord after the game has been started.
+ * This method is used to print the board after the game has been started.
  * @param board
  */
 void printBoard(struct head *board) {
@@ -468,7 +518,6 @@ void QQ() {
  * @param board
  */
 void P(char *cardDeck, struct head *board) {
-    // måske skal det ikke være "struct card"
     struct card *c1 = malloc(sizeof(struct card));
     c1->type[0] = cardDeck[0];
     c1->type[1] = cardDeck[1];
@@ -495,26 +544,25 @@ void P(char *cardDeck, struct head *board) {
     }
 }
 
-void Q(char *cardDeck, struct head *board, struct head *aceFieldtemp) {
-    struct card* currentCard;
-    struct card* prevCard;
+void Q(struct head *board, struct head *aceFieldTemp) {
+    struct card *currentCard;
+    struct card *prevCard;
     for (int i = 0; i < 7; ++i) {
         currentCard = &board[i];
         while (currentCard->next != NULL) {
             prevCard = currentCard;
-            currentCard= currentCard->next;
+            currentCard = currentCard->next;
             free(prevCard);
 
         }
         free(currentCard);
     }
-    while (aceFieldtemp->next != NULL) {
-        currentCard = &aceFieldtemp->next;
-        aceFieldtemp->next = currentCard->next;
+    while (aceFieldTemp->next != NULL) {
+        currentCard = &aceFieldTemp->next;
+        aceFieldTemp->next = currentCard->next;
         free(currentCard);
     }
 
-    return;
 }
 
 /**
@@ -525,7 +573,7 @@ void headFiller(struct head board[]) {
 
     for (int i = 0; i < 7; ++i) {
         struct head h1;
-        h1.next=NULL;
+        h1.next = NULL;
         board[i] = h1;
     }
 }
