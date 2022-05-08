@@ -548,7 +548,7 @@ void Q(struct head *board, struct head *aceFieldTemp) {
     struct card *currentCard;
     struct card *prevCard;
     for (int i = 0; i < 7; ++i) {
-        currentCard = &board[i];
+        currentCard = &board[i].next;
         while (currentCard->next != NULL) {
             prevCard = currentCard;
             currentCard = currentCard->next;
@@ -557,12 +557,13 @@ void Q(struct head *board, struct head *aceFieldTemp) {
         }
         free(currentCard);
     }
-    while (aceFieldTemp->next != NULL) {
-        currentCard = &aceFieldTemp->next;
-        aceFieldTemp->next = currentCard->next;
-        free(currentCard);
+    for (int i = 0; i<4; i++) {
+        while (aceFieldTemp->next != NULL) {
+            currentCard = &aceFieldTemp->next;
+            aceFieldTemp->next = currentCard->next;
+            free(currentCard);
+        }
     }
-
 }
 
 /**
