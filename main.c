@@ -263,6 +263,11 @@ void playGame(struct head *board, struct head *aceSpace) {
             } else if (command[0] == '#') {
                 break;
             }
+        } else if(strlen(command)==9){
+            if(command[3]=='K'){
+
+            }
+
         }
         printLast = 1;
     }
@@ -329,7 +334,7 @@ int checkIfDeckIsValid(const char cards[]) {
                 break;
 
             counter = counter + 2;
-            if (counter == 103)
+            if (counter == 102)
                 return 0;
         }
     }
