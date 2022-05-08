@@ -258,6 +258,7 @@ void playGame(struct head *board, struct head *aceSpace) {
         if (strlen(command) == 1) {
             if (command[0] == 'Q') {
                 Q(board, aceSpace);
+                return;
 
             } else if (command[0] == '#') {
                 break;
@@ -691,6 +692,40 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 
 }
 
+int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile) {
+    struct card *cardToBeMoved = NULL;
+    if (board[startRow].next == NULL) {
+        return 0;
+    } else {
+        cardToBeMoved = board[startRow].next;
+    }
+    while (1) {
+        struct card*beforeCard=cardToBeMoved;
+        cardToBeMoved=cardToBeMoved->next;
+        if(cardToBeMoved->next==NULL){
+            beforeCard->next=NULL;
+            break;
+        }
+
+    }
+    if (pile[endPile].next == NULL) {
+        if (cardToBeMoved->type[0] == 'A')
+            pile[endPile].next = cardToBeMoved;
+        else { printf("Only aces can lay here"); }
+    } else{
+        struct card*onTopCard=pile[endPile].next;
+        while (onTopCard->next!=NULL){
+            onTopCard=onTopCard->next;
+        }
+        if(onTopCard->type[0]==cardToBeMoved->type[0]){
+
+        }
+    }
+
+
+    return 1;
+}
+
 /**
  * Welcome text to get an overview of the commands
  */
@@ -698,10 +733,10 @@ void welcomeText() {
     printf("Welcome to yukon game\n");
     printf("Commands are as follows\n");
     printf("LD: Load a sorted predefined deck\n");
-    printf("LD<UserInput> Load a specific dek of cards\n");
+    printf("LD<UserInput: Load a specific dek of cards; Do not put > at the end\n");
     printf("SR: Shuffle the cards\n");
     printf("SD: Load deck into cards.txt\n");
-    printf("SD<UserInput>: Create or overwrite deck into a file\n");
+    printf("SD<UserInput: Create or overwrite deck into a file; Do not put > at the end \n");
     printf("SI: Do a random deck split\n");
     printf("SI<UserInput>: Do a specific deck split\n");
     printf("SW: Show the cards\n");
