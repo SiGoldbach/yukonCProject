@@ -263,8 +263,8 @@ void playGame(struct head *board, struct head *aceSpace) {
             } else if (command[0] == '#') {
                 break;
             }
-        } else if(strlen(command)==9){
-            if(command[3]=='K'){
+        } else if (strlen(command) == 9) {
+            if (command[3] == 'K') {
 
             }
 
@@ -308,68 +308,113 @@ int LD(char cards[], char name[]) {
     return 1;
 }
 
-//
+// Method for checking if our carddeck is a valid deck with the correct amount of cards and if there are no duplicates etc.
 int checkIfDeckIsValid(const char cards[]) {
-    int typeCounter = 0;
-    int valueCounter = 0;
-    char type = 'U';
-    char value = 'U';
-    int counter = 0;
-    int ret = 1;
-    for (int i = 0; i < 52; ++i) {
-        if (type == 'U') {
-            type = types[0];
-            value = values[0];
-        } else if (value == 'K') {
+    int countForTwo = 0;
+    int countForThree = 0;
+    int countForFour = 0;
+    int countForFive = 0;
+    int countForSix = 0;
+    int countForSeven = 0;
+    int countForEight = 0;
+    int countForNine = 0;
+    int countForTen = 0;
+    int countForJack = 0;
+    int countForQueen = 0;
+    int countForKing = 0;
+    int countForAce = 0;
 
-            typeCounter++;
-            valueCounter = 0;
-            type = types[typeCounter];
-            value = values[valueCounter];
-        } else {
-            valueCounter++;
-            value = values[valueCounter];
-        }
-        while (counter <= 103) {
-            if (value == cards[counter] && type == cards[counter + 1])
+    for (int i = 1; i < 104; i++) {
+
+        switch (cards[i]) {
+            case 'A':
+                countForAce++;
+                break;
+            case 'K':
+                countForKing++;
+                break;
+            case 'Q':
+                countForQueen++;
+                break;
+            case 'J':
+                countForJack++;
+                break;
+            case 'T':
+                countForTen++;
+                break;
+            case '9':
+                countForNine++;
+                break;
+            case '8':
+                countForEight++;
+                break;
+            case '7':
+                countForSeven++;
+                break;
+            case '6':
+                countForSix++;
+                break;
+            case '5':
+                countForFive++;
+                break;
+            case '4':
+                countForFour++;
+                break;
+            case '3':
+                countForThree++;
+                break;
+            case '2':
+                countForTwo++;
                 break;
 
-            counter = counter + 2;
-            if (counter == 102)
-                return 0;
         }
     }
-    return ret;
 
+//Method that checks if there is four of each card in the deck  and if there are no duplicates etc.
+
+    if (countForAce != 4) {
+        return 1;
+    }
+    if (countForKing != 4) {
+        return 1;
+    }
+    if (countForQueen != 4) {
+        return 1;
+    }
+    if (countForJack != 4) {
+        return 1;
+    }
+    if (countForTen != 4) {
+        return 1;
+    }
+    if (countForNine != 4) {
+        return 1;
+    }
+    if (countForEight != 4) {
+        return 1;
+    }
+    if (countForSeven != 4) {
+        return 1;
+    }
+    if (countForSix != 4) {
+        return 1;
+    }
+    if (countForFive != 4) {
+        return 1;
+    }
+    if (countForFour != 4) {
+        return 1;
+    }
+    if (countForThree != 4) {
+        return 1;
+    }
+    if (countForTwo != 4) {
+        return 1;
+    }
+    return 1;
 
 }
 
-//A method for checking if the carddeck is valid.
-int checkDeckValid(const char cards[]) {
-    int typeCounter = 0;
-    int valueCounter = 0;
-    char type = 'U';
-    char value = 'U';
-    int counter = 0;
-    int ret = 1;
-    for (int i = 0; i < 52; ++i) {
-        if (type == 'U') {
-            type = types[0];
-            value = values[0];
-        } else if (value == 'K') {
-
-        }
-        while (counter <= 103) {
-            if (value == cards[counter] && type == cards[counter + 1])
-                break;
-
-                    counter = counter + 2;
-                    if (counter == 103)
-                        return 0;
-                }
-            }
-                return ret; //returns 1 if the deck is valid.
-}
 
 /**
  * This is the print method we use while not playing the game. which just takes a char array.
@@ -733,10 +778,10 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
         cardToBeMoved = board[startRow].next;
     }
     while (1) {
-        struct card*beforeCard=cardToBeMoved;
-        cardToBeMoved=cardToBeMoved->next;
-        if(cardToBeMoved->next==NULL){
-            beforeCard->next=NULL;
+        struct card *beforeCard = cardToBeMoved;
+        cardToBeMoved = cardToBeMoved->next;
+        if (cardToBeMoved->next == NULL) {
+            beforeCard->next = NULL;
             break;
         }
 
@@ -745,12 +790,12 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
         if (cardToBeMoved->type[0] == 'A')
             pile[endPile].next = cardToBeMoved;
         else { printf("Only aces can lay here"); }
-    } else{
-        struct card*onTopCard=pile[endPile].next;
-        while (onTopCard->next!=NULL){
-            onTopCard=onTopCard->next;
+    } else {
+        struct card *onTopCard = pile[endPile].next;
+        while (onTopCard->next != NULL) {
+            onTopCard = onTopCard->next;
         }
-        if(onTopCard->type[0]==cardToBeMoved->type[0]){
+        if (onTopCard->type[0] == cardToBeMoved->type[0]) {
 
         }
     }
