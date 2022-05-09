@@ -66,7 +66,7 @@ void playGame(struct head *board, struct head *aceSpace);
  * We are here defining a correct what a deck should hold with to chararray in look only fashion;
  */
 char types[4] = {'C', 'D', 'H', 'S'};
-char values[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K'};
+char values[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
 
 
 int main() {
@@ -281,12 +281,17 @@ void playGame(struct head *board, struct head *aceSpace) {
             move(board, specificKing, command[1] - 49, command[8] - 49);
 
         } else if (strlen(command) == 6) {
-            printf("Moving to sidePile");
             if (command[4] == 'F') {
+                printf("In if ");
                 moveToSIdePile(board, aceSpace, command[1] - 49, command[5] - 49);
+            } else if (command[0] == 'F') {
+                printf("In F2");
+
+            } else {
+                simpleMove(board, command[1] - 49, command[5] - 49);
             }
+            printLast = 1;
         }
-        printLast = 1;
     }
 
 
@@ -855,21 +860,23 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
 }
 
 int simpleMove(struct head board[], int startRow, int endPile) {
+    if (board[startRow].next == NULL) {
+        printf("There are no cards in this row");
+        return 0;
+    }
+    //Finding the right card to be moved if it is on top do moveWholeRow if it is not do move
     struct card *toBeMoved = board[startRow].next;
-    if (toBeMoved == NULL) {
-        printf("There is no card in this row");
-    }
-    struct card *cardToPointToNUll = toBeMoved;
-    while (toBeMoved->next != NULL) {
-        cardToPointToNUll = toBeMoved;
-        toBeMoved = toBeMoved->next;
-    }
-    struct card *toRow = board[endPile].next;
-    if (toRow == NULL) {
-        if (toBeMoved->type[0] == 'K') {
-            board[endPile].next = toBeMoved;
-            cardToPointToNUll = NULL;
+    if (toBeMoved->next == NULL) {
+        return moveWholeRow(board, startRow, endPile);
+    } else {
+        while (toBeMoved->next != NULL) {
+            toBeMoved = toBeMoved->next;
         }
+        char card[2];
+        card[0] = toBeMoved->type[0];
+        card[1] = toBeMoved->type[1];
+        return move(board, card, startRow, endPile);
+
     }
 
 
@@ -911,11 +918,12 @@ void playGameWelcomeText() {
 
 
 }
+
 /**
  * Show more cards used every time right before show bord to make sure all faceUp cards are face up.
  * @param board
  */
-void showMoreCards(struct head board[]){
+void showMoreCards(struct head board[]) {
     for (int i = 0; i < 7; ++i) {
         if (board[i].next == NULL) {
             continue;
