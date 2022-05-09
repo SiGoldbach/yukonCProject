@@ -20,6 +20,10 @@ void SIRandom(char *cardDeck);
 
 int checkIfDeckIsValid(const char cards[]);
 
+int simpleMove(struct head board[], int startRow, int endPile);
+
+int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile);
+
 void QQ2();
 
 void SD(char filename[], char *cardDeck);
@@ -32,7 +36,7 @@ int LD(char cards[], char name[]);
 
 void printArrArray(char cards[]);
 
-void printBoard(struct head *board);
+void printBoard(struct head *board, struct head *aceSpace);
 
 
 void Q(struct head *board, struct head *aceFieldTemp);
@@ -47,11 +51,12 @@ int moveWholeRow(struct head board[], int startRow, int tooRow);
 
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow);
 
-int commandBeforeGameHub();
 
 void welcomeText();
 
 void playGameWelcomeText();
+
+int commandBeforeGameHub();
 
 void playGame(struct head *board, struct head *aceSpace);
 
@@ -221,13 +226,13 @@ int commandBeforeGameHub() {
 
     P(cardsPointer, board);
     // prints board-method.
-    printBoard(board);
+    printBoard(board, NULL);
     move(board, "KH", 5, 0);
-    printBoard(board);
+    printBoard(board, NULL);
     moveWholeRow(board, 0, 6);
-    printBoard(board);
+    printBoard(board, NULL);
     moveKingToEmptyRow(board, "KS", 6, 0);
-    printBoard(board);
+    printBoard(board, NULL);
     printf("\n");
 
 
@@ -239,12 +244,12 @@ int commandBeforeGameHub() {
 }
 
 void playGame(struct head *board, struct head *aceSpace) {
-    printBoard(board);
     int printLast = 0;
     char command[50];
     char lastCommand[50];
     welcomeText();
     while (1) {
+        printBoard(board, aceSpace);
         printf("LAST Command: ");
         if (printLast) {
             printf("%s\n", lastCommand);
@@ -263,11 +268,20 @@ void playGame(struct head *board, struct head *aceSpace) {
             } else if (command[0] == '#') {
                 break;
             }
-        } else if(strlen(command)==9){
-            if(command[3]=='K'){
+        } else if (strlen(command) == 9) {
 
+            char K = command[3];
+            char type = command[4];
+            char specificKing[2];
+            specificKing[0] = K;
+            specificKing[1] = type;
+            move(board, specificKing, command[1] - 49, command[8] - 49);
+
+        } else if (strlen(command) == 6) {
+            printf("Moving to sidePile");
+            if (command[4] == 'F') {
+                moveToSIdePile(board, aceSpace, command[1] - 49, command[5] - 49);
             }
-
         }
         printLast = 1;
     }
@@ -308,68 +322,113 @@ int LD(char cards[], char name[]) {
     return 1;
 }
 
-//
+// Method for checking if our carddeck is a valid deck with the correct amount of cards and if there are no duplicates etc.
 int checkIfDeckIsValid(const char cards[]) {
-    int typeCounter = 0;
-    int valueCounter = 0;
-    char type = 'U';
-    char value = 'U';
-    int counter = 0;
-    int ret = 1;
-    for (int i = 0; i < 52; ++i) {
-        if (type == 'U') {
-            type = types[0];
-            value = values[0];
-        } else if (value == 'K') {
+    int countForTwo = 0;
+    int countForThree = 0;
+    int countForFour = 0;
+    int countForFive = 0;
+    int countForSix = 0;
+    int countForSeven = 0;
+    int countForEight = 0;
+    int countForNine = 0;
+    int countForTen = 0;
+    int countForJack = 0;
+    int countForQueen = 0;
+    int countForKing = 0;
+    int countForAce = 0;
 
-            typeCounter++;
-            valueCounter = 0;
-            type = types[typeCounter];
-            value = values[valueCounter];
-        } else {
-            valueCounter++;
-            value = values[valueCounter];
-        }
-        while (counter <= 103) {
-            if (value == cards[counter] && type == cards[counter + 1])
+    for (int i = 1; i < 104; i++) {
+
+        switch (cards[i]) {
+            case 'A':
+                countForAce++;
+                break;
+            case 'K':
+                countForKing++;
+                break;
+            case 'Q':
+                countForQueen++;
+                break;
+            case 'J':
+                countForJack++;
+                break;
+            case 'T':
+                countForTen++;
+                break;
+            case '9':
+                countForNine++;
+                break;
+            case '8':
+                countForEight++;
+                break;
+            case '7':
+                countForSeven++;
+                break;
+            case '6':
+                countForSix++;
+                break;
+            case '5':
+                countForFive++;
+                break;
+            case '4':
+                countForFour++;
+                break;
+            case '3':
+                countForThree++;
+                break;
+            case '2':
+                countForTwo++;
                 break;
 
-            counter = counter + 2;
-            if (counter == 102)
-                return 0;
+
         }
     }
-    return ret;
 
+
+    if (countForAce != 4) {
+        return 1;
+    }
+    if (countForKing != 4) {
+        return 1;
+    }
+    if (countForQueen != 4) {
+        return 1;
+    }
+    if (countForJack != 4) {
+        return 1;
+    }
+    if (countForTen != 4) {
+        return 1;
+    }
+    if (countForNine != 4) {
+        return 1;
+    }
+    if (countForEight != 4) {
+        return 1;
+    }
+    if (countForSeven != 4) {
+        return 1;
+    }
+    if (countForSix != 4) {
+        return 1;
+    }
+    if (countForFive != 4) {
+        return 1;
+    }
+    if (countForFour != 4) {
+        return 1;
+    }
+    if (countForThree != 4) {
+        return 1;
+    }
+    if (countForTwo != 4) {
+        return 1;
+    }
+    return 1;
 
 }
 
-//A method for checking if the carddeck is valid.
-int checkDeckValid(const char cards[]) {
-    int typeCounter = 0;
-    int valueCounter = 0;
-    char type = 'U';
-    char value = 'U';
-    int counter = 0;
-    int ret = 1;
-    for (int i = 0; i < 52; ++i) {
-        if (type == 'U') {
-            type = types[0];
-            value = values[0];
-        } else if (value == 'K') {
-
-        }
-        while (counter <= 103) {
-            if (value == cards[counter] && type == cards[counter + 1])
-                break;
-
-                    counter = counter + 2;
-                    if (counter == 103)
-                        return 0;
-                }
-            }
-                return ret; //returns 1 if the deck is valid.
-}
 
 /**
  * This is the print method we use while not playing the game. which just takes a char array.
@@ -402,7 +461,8 @@ void printArrArray(char cards[]) {
  * This method is used to print the board after the game has been started.
  * @param board
  */
-void printBoard(struct head *board) {
+void printBoard(struct head *board, struct head *aceSpace) {
+    int timesPrintingAcePiles = 0;
 
     // prints out the first line containing the different
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
@@ -428,7 +488,18 @@ void printBoard(struct head *board) {
             }
         }
         if (j % 2 == 0 && j <= 6) {
-            printf("\t[]\tF%d", j / 2 + 1);
+            if (aceSpace[timesPrintingAcePiles].next == NULL)
+                printf("\t[]\tF%d", j / 2 + 1);
+            else {
+                struct card *temp = aceSpace[timesPrintingAcePiles].next;
+                while (temp->next != NULL) {
+                    temp = temp->next;
+                }
+                printf("\t%c%c\tF%d", temp->type[0], temp->type[1], j / 2 + 1);
+
+
+            }
+            timesPrintingAcePiles++;
         }
 
         printf("\n");
@@ -644,6 +715,10 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
     if (startRow > 6 || tooRow > 6) {
         return 0;
     }
+    if (board[startRow].next->type[0] == card[0] && board[startRow].next->type[1] == card[1]) {
+        moveWholeRow(board, startRow, tooRow);
+        return 1;
+    }
     struct card *current = board[startRow].next;
     struct card *result = NULL;
     printf("%c%c", current->next->type[0], current->next->type[1]);
@@ -662,6 +737,10 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
     printf("Current: %c%c\n", current->type[0], current->type[1]);
     printf("Result: %c%c", result->type[0], result->type[1]);
     printf("\n");
+    if (board[tooRow].next == NULL) {
+        moveKingToEmptyRow(board, card, startRow, tooRow);
+        return 0;
+    }
     struct card *to = board[tooRow].next;
     while (1) {
         if (to->next == NULL) {
@@ -687,6 +766,7 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
 
         IteratingCard = IteratingCard->next;
     }
+    printf("Got to then end of the loop");
     IteratingCard->next = rowStartToBeMoved;
     board[startRow].next = NULL;
     printf("\n");
@@ -705,6 +785,18 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
  * @return
  */
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow) {
+    if ((startRow > 6 && startRow < 0) || (tooRow > 6 && startRow < 0)) {
+        printf("Wrong startRow or toRow");
+        return 0;
+    }
+    if (card[0] != 'K') {
+        printf("Only kings can be move to empty rows\n");
+        return 0;
+    }
+    if (board[startRow].next == NULL) {
+        printf("There is nothing in that row");
+        return 0;
+    }
     printf("#moveKingToEmptyRow");
     struct card *kingFinder = board[startRow].next;
     printf("%C%C", kingFinder->type[0], kingFinder->type[1]);
@@ -726,37 +818,58 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 }
 
 int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile) {
+    printf("In move to Side Pile\n");
     struct card *cardToBeMoved = NULL;
     if (board[startRow].next == NULL) {
+        printf("There is no cards in that pile\n");
         return 0;
     } else {
         cardToBeMoved = board[startRow].next;
     }
+    struct card *beforeCard = cardToBeMoved;
     while (1) {
-        struct card*beforeCard=cardToBeMoved;
-        cardToBeMoved=cardToBeMoved->next;
-        if(cardToBeMoved->next==NULL){
-            beforeCard->next=NULL;
+        if (cardToBeMoved->next == NULL) {
             break;
         }
-
+        cardToBeMoved = cardToBeMoved->next;
     }
     if (pile[endPile].next == NULL) {
-        if (cardToBeMoved->type[0] == 'A')
+        if (cardToBeMoved->type[0] == 'A') {
             pile[endPile].next = cardToBeMoved;
-        else { printf("Only aces can lay here"); }
-    } else{
-        struct card*onTopCard=pile[endPile].next;
-        while (onTopCard->next!=NULL){
-            onTopCard=onTopCard->next;
+            beforeCard->next = NULL;
+        } else { printf("Only aces can lay here"); }
+    } else {
+        struct card *onTopCard = pile[endPile].next;
+        while (onTopCard->next != NULL) {
+            onTopCard = onTopCard->next;
         }
-        if(onTopCard->type[0]==cardToBeMoved->type[0]){
+        if (onTopCard->type[0] == cardToBeMoved->type[0]) {
 
         }
     }
 
-
     return 1;
+}
+
+int simpleMove(struct head board[], int startRow, int endPile) {
+    struct card *toBeMoved = board[startRow].next;
+    if (toBeMoved == NULL) {
+        printf("There is no card in this row");
+    }
+    struct card *cardToPointToNUll = toBeMoved;
+    while (toBeMoved->next != NULL) {
+        cardToPointToNUll = toBeMoved;
+        toBeMoved = toBeMoved->next;
+    }
+    struct card *toRow = board[endPile].next;
+    if (toRow == NULL) {
+        if (toBeMoved->type[0] == 'K') {
+            board[endPile].next = toBeMoved;
+            cardToPointToNUll = NULL;
+        }
+    }
+
+
 }
 
 /**
