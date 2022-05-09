@@ -55,7 +55,7 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 
 void welcomeText();
 
-int checkIfWon (struct head board[]);
+int checkIfWon(struct head board[]);
 
 void playGameWelcomeText();
 
@@ -650,6 +650,8 @@ void Q(struct head *board, struct head *aceFieldTemp) {
     struct card *currentCard;
     struct card *prevCard;
     for (int i = 0; i < 7; ++i) {
+        if (board[i].next == NULL)
+            continue;
         currentCard = board[i].next;
         while (currentCard->next != NULL) {
             prevCard = currentCard;
@@ -768,6 +770,11 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
 int moveWholeRow(struct head board[], int startRow, int tooRow) {
     printf("#moveWholeRow\n");
     struct card *rowStartToBeMoved = board[startRow].next;
+    if (rowStartToBeMoved->visible == 0) {
+        printf("Illegal move\n");
+        return 0;
+
+    }
     printf("%C%C\n", rowStartToBeMoved->type[0], rowStartToBeMoved->type[1]);
     struct card *IteratingCard = board[tooRow].next;
     while (IteratingCard->next != NULL) {
@@ -828,34 +835,16 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 
 int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile) {
     printf("In move to Side Pile\n");
-    struct card *cardToBeMoved = NULL;
     if (board[startRow].next == NULL) {
         printf("There is no cards in that pile\n");
         return 0;
-    } else {
-        cardToBeMoved = board[startRow].next;
     }
-    struct card *beforeCard = cardToBeMoved;
-    while (1) {
-        if (cardToBeMoved->next == NULL) {
-            break;
-        }
+    //Finding the bottom card value
+    struct card *cardToBeMoved = board[startRow].next;
+    while (cardToBeMoved->next != NULL) {
         cardToBeMoved = cardToBeMoved->next;
     }
-    if (pile[endPile].next == NULL) {
-        if (cardToBeMoved->type[0] == 'A') {
-            pile[endPile].next = cardToBeMoved;
-            beforeCard->next = NULL;
-        } else { printf("Only aces can lay here"); }
-    } else {
-        struct card *onTopCard = pile[endPile].next;
-        while (onTopCard->next != NULL) {
-            onTopCard = onTopCard->next;
-        }
-        if (onTopCard->type[0] == cardToBeMoved->type[0]) {
 
-        }
-    }
 
     return 1;
 }
@@ -939,7 +928,7 @@ void showMoreCards(struct head board[]) {
 
 }
 
-int checkIfWon (struct head board[]) {
+int checkIfWon(struct head board[]) {
     for (int i = 0; i < 7; ++i) {
         if (board[i].next != NULL) {
             return 1;
