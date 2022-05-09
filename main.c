@@ -24,6 +24,8 @@ int simpleMove(struct head board[], int startRow, int endPile);
 
 int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile);
 
+void showMoreCards(struct head board[]);
+
 void QQ2();
 
 void SD(char filename[], char *cardDeck);
@@ -249,6 +251,7 @@ void playGame(struct head *board, struct head *aceSpace) {
     char lastCommand[50];
     welcomeText();
     while (1) {
+        showMoreCards(board);
         printBoard(board, aceSpace);
         printf("LAST Command: ");
         if (printLast) {
@@ -905,6 +908,24 @@ void playGameWelcomeText() {
     printf("Where C is row number and F is ace column\n");
     printf("n stand for number and t stands for type\n");
     printf("Exiting the game back to startScreen is also possible with command Q\n");
+
+
+}
+/**
+ * Show more cards used every time right before show bord to make sure all faceUp cards are face up.
+ * @param board
+ */
+void showMoreCards(struct head board[]){
+    for (int i = 0; i < 7; ++i) {
+        if (board[i].next == NULL) {
+            continue;
+        }
+        struct card *iterator = board[i].next;
+        while (iterator->next != NULL) {
+            iterator = iterator->next;
+        }
+        iterator->visible = 1;
+    }
 
 
 }
