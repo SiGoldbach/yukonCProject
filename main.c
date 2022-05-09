@@ -53,8 +53,9 @@ int moveWholeRow(struct head board[], int startRow, int tooRow);
 
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow);
 
-
 void welcomeText();
+
+int checkIfWon (struct head board[]);
 
 void playGameWelcomeText();
 
@@ -928,4 +929,14 @@ void showMoreCards(struct head board[]){
     }
 
 
+}
+
+int checkIfWon (struct head board[]) {
+    for (int i = 0; i < 7; ++i) {
+        if (board[i].next != NULL) {
+            return 1;
+        }
+    }
+    printf("Congratulations you won");
+    return 0;
 }
