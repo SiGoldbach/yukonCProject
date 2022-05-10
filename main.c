@@ -570,32 +570,32 @@ void printBoard(struct head *board, struct head *aceSpace) {
 /**
  * method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
  */
-void SI(int split, char *cardDeck) {
-    if (split > 52 || split < 0) {
-        printf("you entered invalid card deck split-size\n");
-        return;
+void SI(int split, char *cardDeck) { //split is the number of decks
+    if (split > 52 || split < 0) { //if the number of decks is not valid
+        printf("you entered invalid card deck split-size\n"); //print error message
+        return; //return to main
     }
-    char deck1[split * 2];
-    char deck2[104 - split * 2];
-    for (int i = 0; i < 104; i++) {
-        if (i < split * 2) {
-            deck1[i] = cardDeck[i];
-        } else {
-            deck2[i - split * 2] = cardDeck[i];
+    char deck1[split * 2]; //create deck 1
+    char deck2[104 - split * 2]; //create deck 2
+    for (int i = 0; i < 104; i++) { //loop through all cards
+        if (i < split * 2) { //if the card is in deck 1
+            deck1[i] = cardDeck[i]; //add card to deck 1
+        } else { //if the card is in deck 2
+            deck2[i - split * 2] = cardDeck[i]; //add card to deck 2
         }
     }
-    int removedCardDeck1 = 0;
-    int removedCardDeck2 = 0;
-    for (int i = 0; i < 104; i += 2) {
+    int removedCardDeck1 = 0; //create counter for deck 1
+    int removedCardDeck2 = 0; //create counter for deck 2
+    for (int i = 0; i < 104; i += 2) { //loop through all cards
 
-        if ((i % 4 == 0 && removedCardDeck1 < split) || removedCardDeck2 >= (52 - split)) {
-            cardDeck[i] = deck1[removedCardDeck1 * 2];
-            cardDeck[i + 1] = deck1[removedCardDeck1 * 2 + 1];
-            removedCardDeck1++;
-        } else {
-            cardDeck[i] = deck2[removedCardDeck2 * 2];
-            cardDeck[i + 1] = deck2[removedCardDeck2 * 2 + 1];
-            removedCardDeck2++;
+        if ((i % 4 == 0 && removedCardDeck1 < split) || removedCardDeck2 >= (52 - split)) { //if the card is in deck 1
+            cardDeck[i] = deck1[removedCardDeck1 * 2]; //add card to deck 1
+            cardDeck[i + 1] = deck1[removedCardDeck1 * 2 + 1]; //add card to deck 1
+            removedCardDeck1++; //increment counter
+        } else { //if the card is in deck 2
+            cardDeck[i] = deck2[removedCardDeck2 * 2]; //add card to deck 2
+            cardDeck[i + 1] = deck2[removedCardDeck2 * 2 + 1]; //add card to deck 2
+            removedCardDeck2++; //increment counter
         }
     }
 }
