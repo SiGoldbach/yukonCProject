@@ -946,6 +946,9 @@ int isMoveValid(struct card *bCard, struct card *toBeMovedCard) {
             position = i;
         }
     }
+    if(position==-1){
+        printf("Something is wrong!\n");
+    }
     if (toBeMovedCard->type[0] != values[position - 1]) {
         printf("%c is not smaller than %c\n", toBeMovedCard->type[0], values[position]);
         return 0;
