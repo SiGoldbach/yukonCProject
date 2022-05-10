@@ -129,10 +129,8 @@ int commandBeforeGameHub() {
             } else if ((command[0] == 'S' && command[1] == 'I')) {
                 SIRandom(cardsPointer);
             }
-
             if (command[0] == '#')
                 break;
-
         } else if (command[0] == 'S' && command[1] == 'I') {
             switch (strlen(command)) {
                 case 4:
@@ -261,10 +259,7 @@ void playGame(struct head *board, struct head *aceSpace) {
             printLast = 1;
         }
     }
-
-
 }
-
 
 /**
  * Loading cards from a specified file, if you do not want a specified file,
@@ -274,7 +269,7 @@ void playGame(struct head *board, struct head *aceSpace) {
  * @return
  */
 int LD(char cards[], char name[]) {                                // Load Deck
-FILE *inStream;                                                    // File stream
+    FILE *inStream;                                                    // File stream
     if (strlen(name) != 0) {                                   // If name is not empty
         printf("Loading custom file\n");                    // Print loading custom file
         inStream = fopen(name, "r");                 // Open file
@@ -357,7 +352,7 @@ int checkIfDeckIsValid(const char cards[]) {
                 countForTwo++;
                 break;
 
-            //cases that are not correct cards
+                //cases that are not correct cards
             case 'S':
                 break;
             case 'W':
@@ -406,13 +401,8 @@ int checkIfDeckIsValid(const char cards[]) {
             default:
                 return 0;
                 break;
-
-
-
         }
     }
-
-
     if (countForAce != 4) {
         return 0;
     }
@@ -614,7 +604,6 @@ void SD(char filename[], char *cardDeck) {
     for (int i = 0; i < 104; i += 2) {
         fprintf(f, "%c", cardDeck[i]);
         fprintf(f, "%c\n", cardDeck[i + 1]);
-
     }
     fclose(f);
 }
