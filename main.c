@@ -224,9 +224,6 @@ int commandBeforeGameHub() {
       printf("\n");
     */
 
-
-
-
     P(cardsPointer, board);
     // prints board-method.
     printBoard(board, NULL);
@@ -307,7 +304,7 @@ void playGame(struct head *board, struct head *aceSpace) {
  * @return
  */
 int LD(char cards[], char name[]) {                                // Load Deck
-FILE *inStream;                                                    // File stream
+    FILE *inStream;                                                    // File stream
     if (strlen(name) != 0) {                                   // If name is not empty
         printf("Loading custom file\n");                    // Print loading custom file
         inStream = fopen(name, "r");                 // Open file
@@ -390,7 +387,7 @@ int checkIfDeckIsValid(const char cards[]) {
                 countForTwo++;
                 break;
 
-            //cases that are not correct cards
+                //cases that are not correct cards
             case 'S':
                 break;
             case 'W':
@@ -439,7 +436,6 @@ int checkIfDeckIsValid(const char cards[]) {
             default:
                 return 0;
                 break;
-
 
 
         }
