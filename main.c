@@ -643,7 +643,7 @@ void Q(struct head *board, struct head *aceFieldTemp) {
         free(currentCard);
     }
     for (int i = 0; i < 4; i++) {
-        if(aceFieldTemp[i].next==NULL)
+        if (aceFieldTemp[i].next == NULL)
             continue;
         currentCard = aceFieldTemp[i].next;
         while (currentCard->next != NULL) {
@@ -803,7 +803,6 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
         printf("There is nothing in that row");
         return 0;
     }
-    printf("#moveKingToEmptyRow");
     struct card *kingFinder = board[startRow].next;
     printf("%C%C", kingFinder->type[0], kingFinder->type[1]);
     if (kingFinder->type[0] == card[0] && kingFinder->type[1] == card[1]) {
@@ -855,7 +854,7 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
                 cardToBePlacedUpon->next = board[startRow].next;
                 board[startRow].next = NULL;
                 return 1;
-            } else{
+            } else {
                 return 0;
             }
 
@@ -863,10 +862,35 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
         }
         //Finding the bottom card value
 
+    } else {
+        struct card *cardToBeMoved = board[startRow].next;
+        while (cardToBeMoved->next->next != NULL) {
+            cardToBeMoved = cardToBeMoved->next;
+        }
+        if (pile[endPile].next == NULL) {
+            if (cardToBeMoved->next->type[0] == 'A') {
+                pile[endPile].next = cardToBeMoved->next;
+                cardToBeMoved->next = NULL;
+                return 1;
+            } else {
+                printf("Only aces can be there");
+                return 0;
+            }
+        } else {
+            struct card *iterator = pile[endPile].next;
+            while (iterator->next != NULL) {
+                iterator = iterator->next;
+            }
+            if (isPileMoveValid(iterator, cardToBeMoved->next)) {
+                iterator->next = cardToBeMoved->next;
+                cardToBeMoved->next = NULL;
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
     }
-
-
-    return 1;
 }
 
 int simpleMove(struct head board[], int startRow, int endPile) {
