@@ -40,6 +40,8 @@ void printArrArray(char cards[]);
 
 void printBoard(struct head *board, struct head *aceSpace);
 
+int isPileMoveValid(struct card *bCard, struct card *toBeMovedCard);
+
 void Q(struct head *board, struct head *aceFieldTemp);
 
 void headFiller(struct head board[]);
@@ -70,9 +72,14 @@ int isMoveValid(struct card *bCard, struct card *toBeMovedCard);
 char types[4] = {'C', 'D', 'H', 'S'};
 char values[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
 
+
 int main() {
     commandBeforeGameHub();
+
+
 }
+
+
 int commandBeforeGameHub() {
     char cards[104];
     char *cardsPointer = cards;
@@ -131,8 +138,10 @@ int commandBeforeGameHub() {
             } else if ((command[0] == 'S' && command[1] == 'I')) {
                 SIRandom(cardsPointer);
             }
+
             if (command[0] == '#')
                 break;
+
         } else if (command[0] == 'S' && command[1] == 'I') {
             switch (strlen(command)) {
                 case 4:
@@ -146,11 +155,13 @@ int commandBeforeGameHub() {
                     int big = (command[4] - 48) * 10;
                     int small = command[5] - 48;
                     SI(big + small, cardsPointer);
+
                     break;
                 default:
                     printf("You entered a number that is definitely to high or in a weird format");
                     break;
             }
+
         } else if (command[0] == 'S' && command[1] == 'D') {
             if (!activeDeckBoolean) {
                 printf("There is no active card deck");
@@ -182,35 +193,29 @@ int commandBeforeGameHub() {
                     printf("Deck is invalid");
                 }
             }
+
+
         } else if (command[0] == 'P') {
             if (activeDeckBoolean) {
                 P(cardsPointer, board);
                 printf("P works");
                 playGameWelcomeText();
                 playGame(board, aceField);
+
             } else
                 printf("No deck loaded");
         }
         strcpy(lastCommand, command);
         printLast = 1;
+
+
         printf("\n");
+
+
     }
-    LD(cardsPointer, NULL);
-
-    SR(cards);
-    printf("\n");
-    SD("cards.txt", cardsPointer);
-    P(cardsPointer, board);
-    printBoard(board, NULL);
-    move(board, "KH", 5, 0);
-    printBoard(board, NULL);
-    moveWholeRow(board, 0, 6);
-    printBoard(board, NULL);
-    moveKingToEmptyRow(board, "KS", 6, 0);
-    printBoard(board, NULL);
-    printf("\n");
-
+    // Calls QQ (exit-method).
     return 0;
+
 }
 
 void playGame(struct head *board, struct head *aceSpace) {
@@ -221,6 +226,9 @@ void playGame(struct head *board, struct head *aceSpace) {
     while (1) {
         showMoreCards(board);
         printBoard(board, aceSpace);
+        if (!checkIfWon(board)) {
+            printf("You have won the game\n");
+        }
         printf("LAST Command: ");
         if (printLast) {
             printf("%s\n", lastCommand);
@@ -258,10 +266,14 @@ void playGame(struct head *board, struct head *aceSpace) {
             } else {
                 simpleMove(board, command[1] - 49, command[5] - 49);
             }
-            printLast = 1;
+
         }
+        printLast = 1;
     }
+
+
 }
+
 
 /**
  * Loading cards from a specified file, if you do not want a specified file,
@@ -271,7 +283,7 @@ void playGame(struct head *board, struct head *aceSpace) {
  * @return
  */
 int LD(char cards[], char name[]) {                                // Load Deck
-FILE *inStream;                                                    // File stream
+    FILE *inStream;                                                    // File stream
     if (strlen(name) != 0) {                                   // If name is not empty
         printf("Loading custom file\n");                    // Print loading custom file
         inStream = fopen(name, "r");                 // Open file
@@ -354,55 +366,14 @@ int checkIfDeckIsValid(const char cards[]) {
                 countForTwo++;
                 break;
 
-            //cases that are not correct cards
+                //cases that are not correct cards
             case 'S':
-                break;
-            case 'W':
-                break;
-            case 'E':
-                break;
-            case 'R':
-                break;
-            case 'Y':
-                break;
-            case 'U':
-                break;
-            case 'I':
-                break;
-            case 'O':
-                break;
-            case 'P':
-                break;
             case 'D':
-                break;
-            case 'F':
-                break;
-            case 'G':
-                break;
             case 'H':
-                break;
-            case 'L':
-                break;
-            case 'Z':
-                break;
-            case 'X':
-                break;
             case 'C':
                 break;
-            case 'V':
-                break;
-            case 'B':
-                break;
-            case 'N':
-                break;
-            case 'M':
-                break;
-            case ' ':
-                break;
-
             default:
                 return 0;
-                break;
         }
     }
     if (countForAce != 4) {
@@ -515,12 +486,17 @@ void printBoard(struct head *board, struct head *aceSpace) {
                     temp = temp->next;
                 }
                 printf("\t%c%c\tF%d", temp->type[0], temp->type[1], j / 2 + 1);
+
+
             }
             timesPrintingAcePiles++;
         }
+
         printf("\n");
+
     }
 }
+
 /**
  * method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
  */
@@ -587,6 +563,7 @@ void SR(char *cardDeck) {
         }
         cardDeck[randomCardLocation] = cardToShuffle;
         cardDeck[randomCardLocation + 1] = cardToShuffle2;
+
     }
 }
 
@@ -606,9 +583,11 @@ void SD(char filename[], char *cardDeck) {
     for (int i = 0; i < 104; i += 2) {
         fprintf(f, "%c", cardDeck[i]);
         fprintf(f, "%c\n", cardDeck[i + 1]);
+
     }
     fclose(f);
 }
+
 /**
  * Exits program
  */
@@ -659,6 +638,7 @@ void Q(struct head *board, struct head *aceFieldTemp) {
             prevCard = currentCard;
             currentCard = currentCard->next;
             free(prevCard);
+
         }
         free(currentCard);
     }
@@ -708,6 +688,8 @@ int calculateLongestRowOfCards(struct head board[]) {
         if (cur > longestRow) {
             longestRow = cur;
         }
+
+
     }
     return longestRow;
 }
@@ -795,7 +777,10 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
     printf("\n");
 
     return 1;
+
+
 }
+
 /**
  * Only for moving kings to an empty row
  * @param board
@@ -831,27 +816,34 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
             break;
         }
         kingFinder = kingFinder->next;
+
     }
     return 1;
+
 }
 
 int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile) {
     printf("In move to Side Pile\n");
     if (board[startRow].next == NULL) {
-        printf("There is no cards in that pile\n");
+        printf("There is no cards in that row\n");
         return 0;
+    }
+    if(board[startRow].next->next==NULL){
+
     }
     //Finding the bottom card value
     struct card *cardToBeMoved = board[startRow].next;
     while (cardToBeMoved->next != NULL) {
         cardToBeMoved = cardToBeMoved->next;
     }
+
+
     return 1;
 }
 
 int simpleMove(struct head board[], int startRow, int endPile) {
     if (board[startRow].next == NULL) {
-        printf("There are no cards in this row");
+        printf("There are no cards in this row\n");
         return 0;
     }
     //Finding the right card to be moved if it is on top do moveWholeRow if it is not do move
@@ -866,8 +858,12 @@ int simpleMove(struct head board[], int startRow, int endPile) {
         card[0] = toBeMoved->type[0];
         card[1] = toBeMoved->type[1];
         return move(board, card, startRow, endPile);
+
     }
+
+
 }
+
 /**
  * Welcome text to get an overview of the commands
  */
@@ -884,7 +880,10 @@ void welcomeText() {
     printf("SW: Show the cards\n");
     printf("QQ: Exit the application\n");
     printf("P: play the game\n\n");
+
+
 }
+
 /**
  * Welcome command used when starting the game to help the player out.
  */
@@ -900,6 +899,7 @@ void playGameWelcomeText() {
     printf("Exiting the game back to startScreen is also possible with command Q\n");
 
 }
+
 /**
  * Show more cards used every time right before show bord to make sure all faceUp cards are face up.
  * @param board
@@ -915,6 +915,8 @@ void showMoreCards(struct head board[]) {
         }
         iterator->visible = 1;
     }
+
+
 }
 
 int checkIfWon(struct head board[]) {
@@ -923,7 +925,7 @@ int checkIfWon(struct head board[]) {
             return 1;
         }
     }
-    printf("Congratulations you won");
+    printf("Congratulations you won\n");
     return 0;
 }
 
@@ -941,7 +943,6 @@ int isMoveValid(struct card *bCard, struct card *toBeMovedCard) {
 
     for (int i = 0; i < 13; ++i) {
         if (valueOfCard == values[i]) {
-            printf("The card has the value: %c ", values[i]);
             position = i;
         }
     }
@@ -950,7 +951,37 @@ int isMoveValid(struct card *bCard, struct card *toBeMovedCard) {
         return 0;
     }
     if (toBeMovedCard->type[1] == bCard->type[1]) {
-        printf("Same type");
+        printf("Same type\n");
+        return 0;
+    }
+    return 1;
+
+
+}
+
+int isPileMoveValid(struct card *bCard, struct card *toBeMovedCard) {
+    if (toBeMovedCard->type[0] == 'A') {
+        printf("Aces can only be on the bottom\n");
+        return 0;
+    }
+    if (bCard->type[0] == 'K') {
+        printf("The pile is full\n");
+        return 0;
+    }
+    char valueOfCard = bCard->type[0];
+    int position = -1;
+
+    for (int i = 0; i < 13; ++i) {
+        if (valueOfCard == values[i]) {
+            position = i;
+        }
+    }
+    if (toBeMovedCard->type[0] != values[position + 1]) {
+        printf("%c is not smaller than %c\n", toBeMovedCard->type[0], values[position]);
+        return 0;
+    }
+    if (toBeMovedCard->type[1] != bCard->type[1]) {
+        printf("Not Same type\n");
         return 0;
     }
     return 1;
