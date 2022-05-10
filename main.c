@@ -347,7 +347,7 @@ int checkIfDeckIsValid(const char cards[]) {
     int countForKing = 0;
     int countForAce = 0;
 
-    for (int i = 1; i < 104; i++) {
+    for (int i = 0; i < 104; i++) {
 
         switch (cards[i]) {
             case 'A':
@@ -396,43 +396,43 @@ int checkIfDeckIsValid(const char cards[]) {
 
 
     if (countForAce != 4) {
-        return 1;
+        return 0;
     }
     if (countForKing != 4) {
-        return 1;
+        return 0;
     }
     if (countForQueen != 4) {
-        return 1;
+        return 0;
     }
     if (countForJack != 4) {
-        return 1;
+        return 0;
     }
     if (countForTen != 4) {
-        return 1;
+        return 0;
     }
     if (countForNine != 4) {
-        return 1;
+        return 0;
     }
     if (countForEight != 4) {
-        return 1;
+        return 0;
     }
     if (countForSeven != 4) {
-        return 1;
+        return 0;
     }
     if (countForSix != 4) {
-        return 1;
+        return 0;
     }
     if (countForFive != 4) {
-        return 1;
+        return 0;
     }
     if (countForFour != 4) {
-        return 1;
+        return 0;
     }
     if (countForThree != 4) {
-        return 1;
+        return 0;
     }
     if (countForTwo != 4) {
-        return 1;
+        return 0;
     }
     return 1;
 
@@ -801,7 +801,7 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
  * @return
  */
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow) {
-    if ((startRow > 6 && startRow < 0) || (tooRow > 6 && startRow < 0)) {
+    if ((startRow > 6 || startRow < 0) || (tooRow > 6 || tooRow < 0)) {
         printf("Wrong startRow or toRow");
         return 0;
     }
