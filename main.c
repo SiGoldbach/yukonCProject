@@ -67,9 +67,8 @@ void playGame(struct head *board, struct head *aceSpace);
 int isMoveValid(struct card *bCard, struct card *toBeMovedCard);
 
 /**
- * We are here defining a correct what a deck should hold with to chararray in look only fashion;
+ * We are here defining a correct what types a deck should have to help some methods;
  */
-char types[4] = {'C', 'D', 'H', 'S'};
 char values[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
 
 
@@ -169,7 +168,7 @@ int commandBeforeGameHub() {
             } else {
                 char fileName[50];
                 int start = 3;
-                for (int i = 0; i < strlen(command) - 4; ++i) {
+                for (int i = 0; i < strlen(command) - -1; ++i) {
                     fileName[i] = command[start];
                     start++;
                 }
@@ -183,9 +182,6 @@ int commandBeforeGameHub() {
                 fileName[i] = command[start];
                 start++;
             }
-            printf("%d\n", strlen(command));
-            printf("%d\n", strlen(fileName));
-            printf("%s\n", fileName);
             if (LD(cardsPointer, fileName)) {
                 if (checkIfDeckIsValid(cards)) {
                     activeDeckBoolean = 1;
@@ -307,7 +303,12 @@ int LD(char cards[], char name[]) {                                // Load Deck
     return 1;
 }
 
-// Method for checking if our carddeck is a valid deck with the correct amount of cards and if there are no duplicates etc.
+/**
+ * This method is not complete according to the requirements, it just makes sure the deck resembles a deck with the right amount of each type and number
+ * Just so the game doesnt break and destroys P methods.
+ * @param cards
+ * @return
+ */
 int checkIfDeckIsValid(const char cards[]) {
     int countForTwo = 0;
     int countForThree = 0;
@@ -323,7 +324,7 @@ int checkIfDeckIsValid(const char cards[]) {
     int countForKing = 0;
     int countForAce = 0;
 
-    for (int i = 0; i < 104; i++) {
+    for (int i = 0; i < 104; i += 2) {
 
         switch (cards[i]) {
             case 'A':
@@ -367,14 +368,35 @@ int checkIfDeckIsValid(const char cards[]) {
                 break;
 
                 //cases that are not correct cards
-            case 'S':
-            case 'D':
-            case 'H':
-            case 'C':
-                break;
+
             default:
                 return 0;
         }
+
+    }int countForClubs = 0;
+    int countForSpades = 0;
+    int countForHearts = 0;
+    int countForDiamonds = 0;
+    for (int i = 1; i < 104; i += 2) {
+        switch (cards[i]) {
+            case 'S':
+                countForSpades++;
+                break;
+            case 'D':
+                countForDiamonds++;
+                break;
+            case 'H':
+                countForHearts++;
+                break;
+            case 'C':
+                countForClubs++;
+                break;
+            default:
+                return 0;
+
+
+        }
+
     }
     if (countForAce != 4) {
         return 0;
@@ -413,6 +435,18 @@ int checkIfDeckIsValid(const char cards[]) {
         return 0;
     }
     if (countForTwo != 4) {
+        return 0;
+    }
+    if (countForSpades != 13) {
+        return 0;
+    }
+    if (countForClubs != 13) {
+        return 0;
+    }
+    if (countForHearts != 13) {
+        return 0;
+    }
+    if (countForDiamonds != 13) {
         return 0;
     }
     return 1;
@@ -704,7 +738,6 @@ int calculateLongestRowOfCards(struct head board[]) {
  * @return
  */
 int move(struct head board[], char const card[], int startRow, int tooRow) {
-    printf("#move\n");
     if (startRow > 6 || tooRow > 6) {
         return 0;
     }
@@ -714,22 +747,16 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
     }
     struct card *current = board[startRow].next;
     struct card *result = NULL;
-    printf("%c%c", current->next->type[0], current->next->type[1]);
     while (1) {
         if (current->next == NULL) {
             return 0;
         }
-        printf("%c%c", current->next->type[0], current->next->type[1]);
         if (current->next->type[0] == card[0] && current->next->type[1] == card[1]) {
             result = current->next;
             break;
         }
         current = current->next;
     }
-    printf("\n");
-    printf("Current: %c%c\n", current->type[0], current->type[1]);
-    printf("Result: %c%c", result->type[0], result->type[1]);
-    printf("\n");
     if (board[tooRow].next == NULL) {
         moveKingToEmptyRow(board, card, startRow, tooRow);
         return 0;
@@ -738,7 +765,6 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
     while (1) {
         if (to->next == NULL) {
             if (!isMoveValid(to, result)) {
-                printf("Illegal move\n");
                 return 0;
             }
             to->next = result;
@@ -792,7 +818,7 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
  */
 int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int tooRow) {
     if ((startRow > 6 || startRow < 0) || (tooRow > 6 || tooRow < 0)) {
-        printf("Wrong startRow or toRow");
+        printf("Wrong startRow or toRow\n");
         return 0;
     }
     if (card[0] != 'K') {
@@ -800,7 +826,7 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
         return 0;
     }
     if (board[startRow].next == NULL) {
-        printf("There is nothing in that row");
+        printf("There is nothing in that row\n");
         return 0;
     }
     struct card *kingFinder = board[startRow].next;
@@ -823,22 +849,21 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
 }
 
 int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile) {
+    if ((startRow > 6 || startRow < 0) || (endPile > 3 || endPile < 0)) {
+        printf("Wrong startRow or endPile\n");
+        return 0;
+    }
+
     printf("In move to Side Pile\n");
     if (board[startRow].next == NULL) {
         printf("There is no cards in that row\n");
         return 0;
     }
-    printf("1st if\n");
     if (board[startRow].next->next == NULL) {
-        printf("second if\n");
         if (pile[endPile].next == NULL) {
-            printf("Third if\n");
             if (board->next->type[0] == 'A') {
-                printf("Failing first statement\n");
                 pile[endPile].next = board[startRow].next;
-                printf("Failing first statement\n");
                 board[startRow].next = NULL;
-                printf("Failing first statement\n");
                 return 1;
 
             } else {
@@ -873,7 +898,7 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
                 cardToBeMoved->next = NULL;
                 return 1;
             } else {
-                printf("Only aces can be there");
+                printf("Only aces can be there\n");
                 return 0;
             }
         } else {
