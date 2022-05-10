@@ -373,7 +373,8 @@ int checkIfDeckIsValid(const char cards[]) {
                 return 0;
         }
 
-    }int countForClubs = 0;
+    }
+    int countForClubs = 0;
     int countForSpades = 0;
     int countForHearts = 0;
     int countForDiamonds = 0;
@@ -854,7 +855,6 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
         return 0;
     }
 
-    printf("In move to Side Pile\n");
     if (board[startRow].next == NULL) {
         printf("There is no cards in that row\n");
         return 0;
