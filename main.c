@@ -306,17 +306,17 @@ void playGame(struct head *board, struct head *aceSpace) {
  * @param name
  * @return
  */
-int LD(char cards[], char name[]) {
-    FILE *inStream;
-    if (strlen(name) != 0) {
-        printf("Loading custom file\n");
-        inStream = fopen(name, "r");
-    } else {
-        printf("Loading standard deck\n");
-        inStream = fopen("KortTilSolitare.txt", "r");
+int LD(char cards[], char name[]) {                                // Load Deck
+FILE *inStream;                                                    // File stream
+    if (strlen(name) != 0) {                                   // If name is not empty
+        printf("Loading custom file\n");                    // Print loading custom file
+        inStream = fopen(name, "r");                 // Open file
+    } else {                                                       // If name is empty
+        printf("Loading standard deck\n");                  // Print loading standard deck
+        inStream = fopen("KortTilSolitare.txt", "r"); // Open file
     }
-    if (inStream == NULL) {
-        printf("cant find deck\n");
+    if (inStream == NULL) {                                         // If file is not found
+        printf("cant find deck\n");                         // Print cant find deck
         return 0;
     }
     char read[104];
@@ -389,6 +389,57 @@ int checkIfDeckIsValid(const char cards[]) {
             case '2':
                 countForTwo++;
                 break;
+
+            //cases that are not correct cards
+            case 'S':
+                break;
+            case 'W':
+                break;
+            case 'E':
+                break;
+            case 'R':
+                break;
+            case 'Y':
+                break;
+            case 'U':
+                break;
+            case 'I':
+                break;
+            case 'O':
+                break;
+            case 'P':
+                break;
+            case 'D':
+                break;
+            case 'F':
+                break;
+            case 'G':
+                break;
+            case 'H':
+                break;
+            case 'L':
+                break;
+            case 'Z':
+                break;
+            case 'X':
+                break;
+            case 'C':
+                break;
+            case 'V':
+                break;
+            case 'B':
+                break;
+            case 'N':
+                break;
+            case 'M':
+                break;
+            case ' ':
+                break;
+
+            default:
+                return 0;
+                break;
+
 
 
         }
