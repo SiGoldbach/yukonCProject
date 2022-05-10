@@ -643,11 +643,12 @@ void Q(struct head *board, struct head *aceFieldTemp) {
         free(currentCard);
     }
     for (int i = 0; i < 4; i++) {
+        if(aceFieldTemp[i].next==NULL)
+            continue;
         currentCard = aceFieldTemp[i].next;
-        while (aceFieldTemp->next != NULL) {
+        while (currentCard->next != NULL) {
             prevCard = currentCard;
-            currentCard = aceFieldTemp->next;
-            aceFieldTemp->next = currentCard->next;
+            currentCard = currentCard->next;
             free(prevCard);
         }
         free(currentCard);
@@ -828,13 +829,40 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
         printf("There is no cards in that row\n");
         return 0;
     }
-    if(board[startRow].next->next==NULL){
+    printf("1st if\n");
+    if (board[startRow].next->next == NULL) {
+        printf("second if\n");
+        if (pile[endPile].next == NULL) {
+            printf("Third if\n");
+            if (board->next->type[0] == 'A') {
+                printf("Failing first statement\n");
+                pile[endPile].next = board[startRow].next;
+                printf("Failing first statement\n");
+                board[startRow].next = NULL;
+                printf("Failing first statement\n");
+                return 1;
 
-    }
-    //Finding the bottom card value
-    struct card *cardToBeMoved = board[startRow].next;
-    while (cardToBeMoved->next != NULL) {
-        cardToBeMoved = cardToBeMoved->next;
+            } else {
+                printf("Only aces can lay on the bottom of a pile\n");
+                return 0;
+            }
+        } else {
+            struct card *cardToBePlacedUpon = pile[endPile].next;
+            while (cardToBePlacedUpon->next != NULL) {
+                cardToBePlacedUpon = cardToBePlacedUpon->next;
+            }
+            if (isPileMoveValid(pile[endPile].next, board[startRow].next)) {
+                cardToBePlacedUpon->next = board[startRow].next;
+                board[startRow].next = NULL;
+                return 1;
+            } else{
+                return 0;
+            }
+
+
+        }
+        //Finding the bottom card value
+
     }
 
 
@@ -946,7 +974,7 @@ int isMoveValid(struct card *bCard, struct card *toBeMovedCard) {
             position = i;
         }
     }
-    if(position==-1){
+    if (position == -1) {
         printf("Something is wrong!\n");
         return 0;
     }
@@ -981,7 +1009,7 @@ int isPileMoveValid(struct card *bCard, struct card *toBeMovedCard) {
         }
     }
     if (toBeMovedCard->type[0] != values[position + 1]) {
-        printf("%c is not smaller than %c\n", toBeMovedCard->type[0], values[position]);
+        printf("%c is not supposed to lay on top of %c\n", toBeMovedCard->type[0], values[position]);
         return 0;
     }
     if (toBeMovedCard->type[1] != bCard->type[1]) {
