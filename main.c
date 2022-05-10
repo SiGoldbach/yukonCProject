@@ -63,6 +63,8 @@ int commandBeforeGameHub();
 
 void playGame(struct head *board, struct head *aceSpace);
 
+int isMoveValid(struct card *bCard, struct card *toBeMovedCard);
+
 /**
  * We are here defining a correct what a deck should hold with to chararray in look only fashion;
  */
@@ -210,36 +212,8 @@ int commandBeforeGameHub() {
 
 
     }
-
-    LD(cardsPointer, NULL);
-
-    // Different methods available.
-    SR(cards);
-    printf("\n");
-
-    SD("cards.txt", cardsPointer);
-    // printArrArray(cardsPointer);
-
-    /* SI(5, cards);
-      printf("\n");
-    */
-
-    P(cardsPointer, board);
-    // prints board-method.
-    printBoard(board, NULL);
-    move(board, "KH", 5, 0);
-    printBoard(board, NULL);
-    moveWholeRow(board, 0, 6);
-    printBoard(board, NULL);
-    moveKingToEmptyRow(board, "KS", 6, 0);
-    printBoard(board, NULL);
-    printf("\n");
-
-
-
     // Calls QQ (exit-method).
     return 0;
-
 
 }
 
@@ -304,7 +278,7 @@ void playGame(struct head *board, struct head *aceSpace) {
  * @return
  */
 int LD(char cards[], char name[]) {                                // Load Deck
-    FILE *inStream;                                                    // File stream
+FILE *inStream;                                                    // File stream
     if (strlen(name) != 0) {                                   // If name is not empty
         printf("Loading custom file\n");                    // Print loading custom file
         inStream = fopen(name, "r");                 // Open file
@@ -387,7 +361,7 @@ int checkIfDeckIsValid(const char cards[]) {
                 countForTwo++;
                 break;
 
-                //cases that are not correct cards
+            //cases that are not correct cards
             case 'S':
                 break;
             case 'W':
@@ -436,6 +410,7 @@ int checkIfDeckIsValid(const char cards[]) {
             default:
                 return 0;
                 break;
+
 
 
         }
@@ -566,7 +541,7 @@ void printBoard(struct head *board, struct head *aceSpace) {
 /**
  * method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
  */
-void SI(int split, char *cardDeck) {
+void SI(int split, char *cardDeck) { //split is the number of decks
     if (split > 52 || split < 0) { //if the number of decks is not valid
         printf("you entered invalid card deck split-size\n"); //print error message
         return; //return to main
@@ -802,6 +777,10 @@ int move(struct head board[], char const card[], int startRow, int tooRow) {
     struct card *to = board[tooRow].next;
     while (1) {
         if (to->next == NULL) {
+            if (!isMoveValid(to, result)) {
+                printf("Illegal move\n");
+                return 0;
+            }
             to->next = result;
             break;
         }
@@ -829,9 +808,13 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
 
         IteratingCard = IteratingCard->next;
     }
-    printf("Got to then end of the loop");
-    IteratingCard->next = rowStartToBeMoved;
-    board[startRow].next = NULL;
+    if (isMoveValid(IteratingCard, rowStartToBeMoved)) {
+        IteratingCard->next = rowStartToBeMoved;
+        board[startRow].next = NULL;
+    } else {
+        return 0;
+    }
+
     printf("\n");
 
     return 1;
@@ -984,3 +967,35 @@ int checkIfWon(struct head board[]) {
     printf("Congratulations you won");
     return 0;
 }
+
+int isMoveValid(struct card *bCard, struct card *toBeMovedCard) {
+    if (bCard->type[0] == 'A') {
+        printf("Ace is the smallest card\n");
+        return 0;
+    }
+    if (!toBeMovedCard->visible) {
+        printf("Invisible card\n");
+        return 0;
+    }
+    char valueOfCard = bCard->type[0];
+    int position = -1;
+
+    for (int i = 0; i < 13; ++i) {
+        if (valueOfCard == values[i]) {
+            printf("The card has the value: %c ", values[i]);
+            position = i;
+        }
+    }
+    if (toBeMovedCard->type[0] != values[position - 1]) {
+        printf("%c is not smaller than %c\n", toBeMovedCard->type[0], values[position]);
+        return 0;
+    }
+    if (toBeMovedCard->type[1] == bCard->type[1]) {
+        printf("Same type");
+        return 0;
+    }
+    return 1;
+
+
+}
+
