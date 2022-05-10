@@ -570,7 +570,7 @@ void printBoard(struct head *board, struct head *aceSpace) {
 /**
  * method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
  */
-void SI(int split, char *cardDeck) { //split is the number of decks
+void SI(int split, char *cardDeck) {
     if (split > 52 || split < 0) { //if the number of decks is not valid
         printf("you entered invalid card deck split-size\n"); //print error message
         return; //return to main
