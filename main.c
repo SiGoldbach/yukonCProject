@@ -40,7 +40,6 @@ void printArrArray(char cards[]);
 
 void printBoard(struct head *board, struct head *aceSpace);
 
-
 void Q(struct head *board, struct head *aceFieldTemp);
 
 void headFiller(struct head board[]);
@@ -69,14 +68,9 @@ void playGame(struct head *board, struct head *aceSpace);
 char types[4] = {'C', 'D', 'H', 'S'};
 char values[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
 
-
 int main() {
     commandBeforeGameHub();
-
-
 }
-
-
 int commandBeforeGameHub() {
     char cards[104];
     char *cardsPointer = cards;
@@ -152,13 +146,11 @@ int commandBeforeGameHub() {
                     int big = (command[4] - 48) * 10;
                     int small = command[5] - 48;
                     SI(big + small, cardsPointer);
-
                     break;
                 default:
                     printf("You entered a number that is definitely to high or in a weird format");
                     break;
             }
-
         } else if (command[0] == 'S' && command[1] == 'D') {
             if (!activeDeckBoolean) {
                 printf("There is no active card deck");
@@ -190,45 +182,25 @@ int commandBeforeGameHub() {
                     printf("Deck is invalid");
                 }
             }
-
-
         } else if (command[0] == 'P') {
             if (activeDeckBoolean) {
                 P(cardsPointer, board);
                 printf("P works");
                 playGameWelcomeText();
                 playGame(board, aceField);
-
             } else
                 printf("No deck loaded");
         }
         strcpy(lastCommand, command);
         printLast = 1;
-
-
         printf("\n");
-
-
     }
-
     LD(cardsPointer, NULL);
 
-    // Different methods available.
     SR(cards);
     printf("\n");
-
     SD("cards.txt", cardsPointer);
-    // printArrArray(cardsPointer);
-
-    /* SI(5, cards);
-      printf("\n");
-    */
-
-
-
-
     P(cardsPointer, board);
-    // prints board-method.
     printBoard(board, NULL);
     move(board, "KH", 5, 0);
     printBoard(board, NULL);
@@ -238,12 +210,7 @@ int commandBeforeGameHub() {
     printBoard(board, NULL);
     printf("\n");
 
-
-
-    // Calls QQ (exit-method).
     return 0;
-
-
 }
 
 void playGame(struct head *board, struct head *aceSpace) {
@@ -556,17 +523,12 @@ void printBoard(struct head *board, struct head *aceSpace) {
                     temp = temp->next;
                 }
                 printf("\t%c%c\tF%d", temp->type[0], temp->type[1], j / 2 + 1);
-
-
             }
             timesPrintingAcePiles++;
         }
-
         printf("\n");
-
     }
 }
-
 /**
  * method to split card into smaller stacks and sort them back into one deck in order of 1 by 1 from each deck.
  */
@@ -633,7 +595,6 @@ void SR(char *cardDeck) {
         }
         cardDeck[randomCardLocation] = cardToShuffle;
         cardDeck[randomCardLocation + 1] = cardToShuffle2;
-
     }
 }
 
@@ -657,7 +618,6 @@ void SD(char filename[], char *cardDeck) {
     }
     fclose(f);
 }
-
 /**
  * Exits program
  */
@@ -708,7 +668,6 @@ void Q(struct head *board, struct head *aceFieldTemp) {
             prevCard = currentCard;
             currentCard = currentCard->next;
             free(prevCard);
-
         }
         free(currentCard);
     }
@@ -758,8 +717,6 @@ int calculateLongestRowOfCards(struct head board[]) {
         if (cur > longestRow) {
             longestRow = cur;
         }
-
-
     }
     return longestRow;
 }
@@ -839,10 +796,7 @@ int moveWholeRow(struct head board[], int startRow, int tooRow) {
     printf("\n");
 
     return 1;
-
-
 }
-
 /**
  * Only for moving kings to an empty row
  * @param board
@@ -878,10 +832,8 @@ int moveKingToEmptyRow(struct head board[], char const card[], int startRow, int
             break;
         }
         kingFinder = kingFinder->next;
-
     }
     return 1;
-
 }
 
 int moveToSIdePile(struct head board[], struct head pile[], int startRow, int endPile) {
@@ -895,8 +847,6 @@ int moveToSIdePile(struct head board[], struct head pile[], int startRow, int en
     while (cardToBeMoved->next != NULL) {
         cardToBeMoved = cardToBeMoved->next;
     }
-
-
     return 1;
 }
 
@@ -917,12 +867,8 @@ int simpleMove(struct head board[], int startRow, int endPile) {
         card[0] = toBeMoved->type[0];
         card[1] = toBeMoved->type[1];
         return move(board, card, startRow, endPile);
-
     }
-
-
 }
-
 /**
  * Welcome text to get an overview of the commands
  */
@@ -939,10 +885,7 @@ void welcomeText() {
     printf("SW: Show the cards\n");
     printf("QQ: Exit the application\n");
     printf("P: play the game\n\n");
-
-
 }
-
 /**
  * Welcome command used when starting the game to help the player out.
  */
@@ -957,9 +900,7 @@ void playGameWelcomeText() {
     printf("n stand for number and t stands for type\n");
     printf("Exiting the game back to startScreen is also possible with command Q\n");
 
-
 }
-
 /**
  * Show more cards used every time right before show bord to make sure all faceUp cards are face up.
  * @param board
@@ -975,8 +916,6 @@ void showMoreCards(struct head board[]) {
         }
         iterator->visible = 1;
     }
-
-
 }
 
 int checkIfWon(struct head board[]) {
